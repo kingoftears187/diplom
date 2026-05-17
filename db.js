@@ -61,6 +61,11 @@ class TransnaftaDB {
 
     initialize() {
         return new Promise((resolve, reject) => {
+            try {
+                fs.mkdirSync(path.dirname(this.dbPath), { recursive: true });
+            } catch (e) {
+                return reject(e);
+            }
             this.db = new sqlite3.Database(this.dbPath, (err) => {
                 if (err) reject(err);
                 else {

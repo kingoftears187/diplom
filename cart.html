@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -74,7 +74,7 @@
                     <span>Итого</span>
                     <span id="cartTotal" class="gradient-text">0 ₽</span>
                 </div>
-                <p class="text-sm text-[color:var(--muted)] mb-4">Цены ориентировочные по калькулятору. Финальная ставка после согласования.</p>
+                <p class="text-sm text-[color:var(--muted)] mb-4">Цены ориентировочные по калькулятору. Для оформления заявки нужно войти в личный кабинет.</p>
                 <button type="button" onclick="submitAllOrders()" class="cart-checkout">
                     <i data-lucide="send" class="ico"></i>
                     Оформить все заявки
@@ -249,30 +249,41 @@
             }
         }
 
+        function getCurrentOrderUser() {
+            try {
+                const cu = localStorage.getItem('current_user');
+                if (!cu) return null;
+                const u = JSON.parse(cu);
+                const rawId = u && (u.id != null ? u.id : u.userId);
+                const id = rawId != null && rawId !== '' ? parseInt(String(rawId), 10) : null;
+                if (!Number.isFinite(id)) return null;
+                return {
+                    id,
+                    email: u.email ? String(u.email).trim() : ''
+                };
+            } catch (_) {
+                return null;
+            }
+        }
+
         async function submitAllOrders() {
             if (cart.length === 0) {
                 alert('Корзина пуста');
                 return;
             }
 
-            let userId = null;
-            let clientEmail = '';
-            try {
-                const cu = localStorage.getItem('current_user');
-                if (cu) {
-                    const u = JSON.parse(cu);
-                    const rawId = u && (u.id != null ? u.id : u.userId);
-                    if (rawId != null && rawId !== '') userId = parseInt(String(rawId), 10);
-                    if (!Number.isFinite(userId)) userId = null;
-                    if (u.email) clientEmail = String(u.email).trim();
-                }
-            } catch (_) {}
+            const currentUser = getCurrentOrderUser();
+            if (!currentUser) {
+                alert('Чтобы оформить заявку, сначала войдите или зарегистрируйтесь в личном кабинете.');
+                window.location.href = 'cabinet.html';
+                return;
+            }
 
             const payload = {
                 session_token: tnStableSessionToken(),
                 visitor_key: tnStableVisitorKey(),
-                user_id: userId,
-                client_email: clientEmail,
+                user_id: currentUser.id,
+                client_email: currentUser.email,
                 items: cart.map((i) => ({
                     from: i.from,
                     to: i.to,
