@@ -351,23 +351,23 @@ app.post('/api/orders/batch', async (req, res) => {
 
         let clientMail = '';
         if (typeof client_email === 'string') clientMail = client_email.trim();
-        const uid = user_id ? parseInt(String(user_id), 10) : null;
-        if (!Number.isFinite(uid)) {
-            return res.status(401).json({
-                success: false,
-                message: 'Для оформления заявки необходимо войти в личный кабинет'
-            });
-        }
-        const userRow = await db.getUserById(uid);
-        if (!userRow) {
-            return res.status(401).json({
-                success: false,
-                message: 'Пользователь не найден. Войдите в личный кабинет повторно'
-            });
-        }
-        if (!clientMail && userRow.email) clientMail = String(userRow.email).trim();
         if (!Array.isArray(items) || items.length === 0) {
             return res.status(400).json({ success: false, message: 'Нет позиций' });
+        }
+
+        const requiredUserId = user_id ? parseInt(String(user_id), 10) : null;
+        if (!Number.isFinite(requiredUserId)) {
+            return res.status(401).json({
+                success: false,
+                message: 'Чтобы оформить заказ, войдите в личный кабинет или зарегистрируйтесь'
+            });
+        }
+        const orderUser = await db.getUserById(requiredUserId);
+        if (!orderUser) {
+            return res.status(401).json({
+                success: false,
+                message: 'Сессия пользователя не найдена. Войдите в личный кабинет заново'
+            });
         }
 
         const mapped = items.map((i) => ({
@@ -389,7 +389,7 @@ app.post('/api/orders/batch', async (req, res) => {
         const sid = service_id != null && service_id !== '' ? parseInt(String(service_id), 10) : null;
 
         const meta = {
-            user_id: uid,
+            user_id: requiredUserId,
             session_token: session_token || '',
             visitor_key: visitor_key || '',
             client_email: clientMail,
@@ -398,16 +398,17 @@ app.post('/api/orders/batch', async (req, res) => {
 
         const created = await db.createOrdersBatch(mapped, meta);
         /** Доп. привязка гостевых строк с тем же visitor_key после вставки (на случай расхождения user_id при вставке). */
-        if (Number.isFinite(uid) && meta.visitor_key) {
+        const uidForAttach = meta.user_id ? parseInt(String(meta.user_id), 10) : null;
+        if (Number.isFinite(uidForAttach) && meta.visitor_key) {
             try {
-                await db.attachVisitorOrdersToUser(uid, String(meta.visitor_key));
+                await db.attachVisitorOrdersToUser(uidForAttach, String(meta.visitor_key));
             } catch (e) {
                 console.warn('[orders/batch] attachVisitorOrdersToUser:', e.message);
             }
         }
-        if (Number.isFinite(uid) && clientMail) {
+        if (Number.isFinite(uidForAttach) && clientMail) {
             try {
-                await db.attachGuestOrdersByClientEmail(uid, clientMail);
+                await db.attachGuestOrdersByClientEmail(uidForAttach, clientMail);
             } catch (e) {
                 console.warn('[orders/batch] attachGuestOrdersByClientEmail:', e.message);
             }
