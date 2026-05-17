@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ТрансНафта — Перевозка грузов по России</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="theme.css">
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <script src="api-base.js"></script>
+    <script src="icons-init.js" defer></script>
+    <script src="tracker.js"></script>
+    <script src="auth.js"></script>
+    <script src="mobile-menu.js"></script>
+    <style>.review-card { animation: tn-rise 0.8s ease-out forwards; } .chat-message, #chat-window { animation: tn-rise 0.3s ease-out forwards; }</style>
+</head>
+<body>
+    <nav class="tn-nav">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                <div class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></div>
+                <div>
+                    <div class="heading text-2xl sm:text-3xl font-bold tracking-tight">ТрансНафта</div>
+                    <span class="block text-[0.62rem] font-semibold text-[color:var(--muted)] uppercase tracking-[0.2em]">логистика</span>
+                </div>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="services.html" class="nav-link">Услуги</a>
+                <a href="calculator.html" class="nav-link">Калькулятор</a>
+                <a href="about.html" class="nav-link">О компании</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="admin.html" class="tn-icon-btn" title="Админ панель"><i data-lucide="shield-check" class="ico ico-nav"></i></a>
+                <a href="cabinet.html" class="hidden sm:flex tn-icon-btn"><i data-lucide="user-circle" class="ico ico-nav"></i><span class="hidden sm:inline font-semibold text-sm">Кабинет</span></a>
+                <a href="cart.html" class="tn-cart-btn">
+                    <i data-lucide="shopping-bag" class="ico ico-nav"></i>
+                    <span class="hidden sm:inline">Корзина</span>
+                    <span id="cartCount">0</span>
+                </a>
+                <button type="button" id="mobileMenuBtn" class="md:hidden"><i data-lucide="menu" class="ico ico-nav"></i></button>
+            </div>
+        </div>
+        
+        <aside id="mobileMenu" class="hidden md:hidden">
+            <nav class="tn-container py-4 flex flex-col gap-1">
+                <a href="index.html">Главная</a>
+                <a href="services.html">Услуги</a>
+                <a href="calculator.html">Калькулятор</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+                <hr class="border-white/10 my-2">
+                <a href="cabinet.html"><i data-lucide="user-circle" class="ico ico-sm inline align-middle mr-2"></i>Личный кабинет</a>
+            </nav>
+        </aside>
+    </nav>
+
+   <!-- HERO -->
+    <section class="hero-bg">
+        <section class="tn-container relative z-10 py-16 lg:py-24">
+            <section class="hero-grid">
+                <article class="fade-in">
+                    <p class="hero-badge"><i data-lucide="sparkles" class="ico ico-sm"></i> С 2009 года на рынке</p>
+                <h1 class="heading text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tighter mb-6 gradient-text">
+                    Надёжная перевозка грузов по России
+                </h1>
+                <p class="text-lg md:text-xl text-white/75 mb-8 max-w-xl">Автомобильные, контейнерные и рефрижераторные перевозки. GPS-контроль, страхование и персональный менеджер на каждом маршруте.</p>
+                <p class="flex flex-col sm:flex-row flex-wrap gap-4">
+                    <a href="calculator.html" class="tn-btn-primary"><i data-lucide="calculator" class="ico"></i> Рассчитать стоимость</a>
+                    <a href="services.html" class="tn-btn-outline"><i data-lucide="layout-grid" class="ico"></i> Наши услуги</a>
+                </p>
+                </article>
+                <aside class="hero-stats-rail fade-in">
+                    <p class="hero-stat-item"><strong>50 000+</strong><span>доставок</span></p>
+                    <p class="hero-stat-item"><strong>120</strong><span>единиц техники</span></p>
+                    <p class="hero-stat-item"><strong>78</strong><span>регионов РФ</span></p>
+                    <p class="hero-stat-item"><strong>4.9</strong><span>рейтинг клиентов</span></p>
+                </aside>
+            </section>
+        </section>
+    </section>
+
+    <!-- Преимущества -->
+    <section class="py-12 sm:py-16 md:py-20 tn-band tn-band--shift">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            <div class="stat-card card-glowing backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center border border-white/10 hover:border-[#00d4ff]/50 transition">
+                <div class="text-[#00d4ff] mb-3 sm:mb-4 flex justify-center"><i data-lucide="chart-column" class="ico-xl"></i></div>
+                <h3 class="text-lg sm:text-2xl font-semibold mb-2 text-[#00d4ff]">50 000+ грузов</h3>
+                <p class="text-sm sm:text-base text-white/70">Успешно доставлено по всей России</p>
+                <div class="mt-3 sm:mt-4 text-[#ff8c00] font-bold text-base sm:text-lg">99.8% успеха</div>
+            </div>
+            <div class="stat-card card-glowing backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center border border-white/10 hover:border-[#00d4ff]/50 transition">
+                <div class="text-[#ff8c00] mb-3 sm:mb-4 flex justify-center"><i data-lucide="truck" class="ico-xl"></i></div>
+                <h3 class="text-lg sm:text-2xl font-semibold mb-2 text-[#00d4ff]">120 машин</h3>
+                <p class="text-sm sm:text-base text-white/70">Современный автопарк с GPS-отслеживанием</p>
+                <div class="mt-3 sm:mt-4 text-[#ff8c00] font-bold text-base sm:text-lg">Обновлено в 2024</div>
+            </div>
+            <div class="stat-card card-glowing backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center border border-white/10 hover:border-[#00d4ff]/50 transition">
+                <div class="text-[#00d4ff] mb-3 sm:mb-4 flex justify-center"><i data-lucide="timer" class="ico-xl"></i></div>
+                <h3 class="text-lg sm:text-2xl font-semibold mb-2 text-[#00d4ff]">Средний срок</h3>
+                <p class="text-sm sm:text-base text-white/70">5.2 дня доставки в среднем по России</p>
+                <div class="mt-3 sm:mt-4 text-[#ff8c00] font-bold text-base sm:text-lg">±0.5 дня точность</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Отзывы клиентов -->
+    <section class="py-20 tn-band tn-band--glow relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="heading text-5xl font-bold mb-4 gradient-text">Отзывы наших клиентов</h2>
+                <p class="text-white/70 text-lg max-w-2xl mx-auto">Более 15 000 положительных отзывов от компаний, которые доверили нам свои грузы</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="review-card card-glowing backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="star">★★★★★</span>
+                        <span class="text-white/60 text-sm">5.0</span>
+                    </div>
+                    <p class="text-white/80 mb-6 leading-relaxed">Профессиональный подход, точная доставка, прозрачная цена. Работаем с ТрансНафта уже 3 года.</p>
+                    <div class="border-t border-white/10 pt-4 mt-4">
+                        <p class="font-semibold text-[#00d4ff]">ООО "РосХолод"</p>
+                        <p class="text-white/60 text-sm">Доставка рефрижераторных грузов</p>
+                    </div>
+                </div>
+                <div class="review-card card-glowing backdrop-blur-xl rounded-3xl p-8 border border-white/10" style="animation-delay: 0.1s;">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="star">★★★★★</span>
+                        <span class="text-white/60 text-sm">5.0</span>
+                    </div>
+                    <p class="text-white/80 mb-6 leading-relaxed">Отличный сервис, оперативно решают любые вопросы. GPS отслеживание работает идеально. Рекомендуем!</p>
+                    <div class="border-t border-white/10 pt-4 mt-4">
+                        <p class="font-semibold text-[#00d4ff]">АО "МегаЛогистика"</p>
+                        <p class="text-white/60 text-sm">Контейнерные перевозки</p>
+                    </div>
+                </div>
+                <div class="review-card card-glowing backdrop-blur-xl rounded-3xl p-8 border border-white/10" style="animation-delay: 0.2s;">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="star">★★★★★</span>
+                        <span class="text-white/60 text-sm">5.0</span>
+                    </div>
+                    <p class="text-white/80 mb-6 leading-relaxed">Экономные тарифы при высоком качестве. Менеджер помогал со сложными маршрутами. Спасибо!</p>
+                    <div class="border-t border-white/10 pt-4 mt-4">
+                        <p class="font-semibold text-[#00d4ff]">ИП Сидоров А.В.</p>
+                        <p class="text-white/60 text-sm">Грузовые перевозки</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 text-center">
+                <div class="inline-block bg-white/5 rounded-full px-8 py-4 border border-white/10">
+                    <span class="text-white/80">Средний рейтинг: </span>
+                    <span class="text-2xl font-bold text-[#00d4ff]">4.9 ★</span>
+                    <span class="text-white/60 ml-2">из 5 (15 234 отзыва)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Статистика по регионам -->
+    <section class="py-20 tn-band tn-band--invert">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="heading text-5xl font-bold mb-4 gradient-text">Охват по России</h2>
+                <p class="text-white/70 text-lg">Доставляем грузы во все федеральные округа</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card-glowing rounded-3xl p-8 text-center border border-white/10">
+                    <h3 class="text-3xl font-bold text-[#00d4ff] mb-2">78</h3>
+                    <p class="text-white/70">Регионов России</p>
+                    <p class="text-white/50 text-sm mt-2">Включая удалённые</p>
+                </div>
+                <div class="card-glowing rounded-3xl p-8 text-center border border-white/10">
+                    <h3 class="text-3xl font-bold text-[#ff8c00] mb-2">24/7</h3>
+                    <p class="text-white/70">Диспетчерский центр</p>
+                    <p class="text-white/50 text-sm mt-2">Готов к заявкам</p>
+                </div>
+                <div class="card-glowing rounded-3xl p-8 text-center border border-white/10">
+                    <h3 class="text-3xl font-bold text-[#00d4ff] mb-2">8.5M км</h3>
+                    <p class="text-white/70">Проехано в год</p>
+                    <p class="text-white/50 text-sm mt-2">Без происшествий</p>
+                </div>
+                <div class="card-glowing rounded-3xl p-8 text-center border border-white/10">
+                    <h3 class="text-3xl font-bold text-[#ff8c00] mb-2">₽12M+</h3>
+                    <p class="text-white/70">Объём страховки</p>
+                    <p class="text-white/50 text-sm mt-2">На груз</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Рейтинги и сертификаты -->
+    <section class="py-20 tn-band">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="heading text-5xl font-bold mb-4 gradient-text">Мы ценим доверие</h2>
+                <p class="text-white/70 text-lg">Признания и сертификаты от крупных платформ</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                    <div class="flex items-start gap-4">
+                        <div class="text-[#00d4ff]"><i data-lucide="star" class="ico-xl"></i></div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-semibold mb-2 text-[#00d4ff]">Яндекс.Карты</h3>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="star">★★★★★</span>
+                                <span class="text-white/80 font-semibold">4.8/5</span>
+                            </div>
+                            <p class="text-white/70">4 382 отзыва про доставку и сервис</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                    <div class="flex items-start gap-4">
+                        <div class="text-[#ff8c00]"><i data-lucide="badge-check" class="ico-xl"></i></div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-semibold mb-2 text-[#ff8c00]">ISO 9001:2015</h3>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-white/80 font-semibold">Сертифицировано</span>
+                            </div>
+                            <p class="text-white/70">Система управления качеством доставки</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                    <div class="flex items-start gap-4">
+                        <div class="text-[#00d4ff]"><i data-lucide="trophy" class="ico-xl"></i></div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-semibold mb-2 text-[#00d4ff]">Лидер рынка 2024</h3>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-white/80 font-semibold">РЛА "Логистика РФ"</span>
+                            </div>
+                            <p class="text-white/70">Лучшая логистическая компания года</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                    <div class="flex items-start gap-4">
+                        <div class="text-[#ff8c00]"><i data-lucide="briefcase-business" class="ico-xl"></i></div>
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-semibold mb-2 text-[#ff8c00]">ФТС России</h3>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-white/80 font-semibold">Лицензировано</span>
+                            </div>
+                            <p class="text-white/70">Право на таможенное оформление</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="site-footer">
+        <div class="site-footer-deck">
+            <section class="site-footer-inner">
+                <article class="site-footer-brand">
+                    <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                        <span class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></span>
+                        <span class="tn-logo-text">ТрансНафта<span>логистика по России</span></span>
+                    </a>
+                    <p class="tn-footer-tagline">Надёжные грузоперевозки по всей России. Расчёт, оформление и контроль доставки в одном контуре.</p>
+                    <div class="tn-footer-meta">
+                        <span class="site-footer-chip">24/7 диспетчер</span>
+                        <span class="site-footer-chip site-footer-chip--warm">с 2009 года</span>
+                    </div>
+                </article>
+                <article>
+                    <h4>Навигация</h4>
+                    <a href="services.html">Услуги</a>
+                    <a href="calculator.html">Калькулятор</a>
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                </article>
+                <article>
+                    <h4>Клиентам</h4>
+                    <a href="cabinet.html">Личный кабинет</a>
+                    <a href="cart.html">Корзина</a>
+                    <a href="calculator.html">Рассчитать доставку</a>
+                </article>
+                <div class="site-footer-route" aria-hidden="true">
+                    <span>Терминал</span>
+                    <span class="site-footer-route-line"></span>
+                    <span>Маршрут · RU</span>
+                </div>
+            </section>
+            <div class="site-footer-bottom">
+                <p>© 2026 ТрансНафта. Все права защищены.</p>
+                <span class="site-footer-slot">TN-FTR-2026 · ISO-DOCK</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== ЧАТ ПОДДЕРЖКИ (НОВАЯ ЧАСТЬ) ==================== -->
+    <!-- Плавающая кнопка чата -->
+    <button type="button" id="chat-button" class="fixed" aria-label="Открыть чат поддержки" title="Чат поддержки">
+        <i data-lucide="message-circle" class="ico-xl"></i>
+        <span class="absolute -top-1 -right-1 bg-emerald-400 text-[10px] font-bold px-1.5 py-0.5 rounded-full text-slate-900 animate-pulse">ON</span>
+    </button>
+
+    <div id="chat-window"
+         class="hidden fixed bottom-28 right-8 w-[380px] h-[560px] flex flex-col border border-white/10 overflow-hidden z-[10000] rounded-[22px] bg-[#151822] shadow-2xl">
+        
+        <div class="bg-gradient-to-r from-violet-600 to-cyan-500 px-5 py-4 flex items-center justify-between text-white">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-black/25 rounded-xl flex items-center justify-center"><i data-lucide="headphones" class="ico text-white"></i></div>
+                <div>
+                    <p class="font-bold text-base leading-tight">Поддержка ТрансНафта</p>
+                    <p class="text-xs opacity-90 mt-0.5">Qwen 2.5 · онлайн</p>
+                </div>
+            </div>
+            <button type="button" id="close-chat" class="p-2 rounded-lg hover:bg-black/10 transition"><i data-lucide="x" class="ico"></i></button>
+        </div>
+
+        <div id="chat-messages" class="flex-1 p-5 overflow-y-auto space-y-4 text-sm bg-[#0e1017]">
+        </div>
+
+        <div class="p-4 border-t border-white/10 bg-[#151822]">
+            <div class="flex gap-3">
+                <input 
+                    id="chat-input"
+                    type="text"
+                    placeholder="Вопрос о доставке..."
+                    class="flex-1 bg-white/5 border border-white/15 focus:border-violet-400 rounded-2xl px-5 py-3.5 text-white placeholder:text-white/45 focus:outline-none text-base">
+                <button type="button" id="send-button"
+                        class="w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center bg-gradient-to-br from-violet-600 to-cyan-500 text-white hover:scale-105 transition shadow-lg">
+                    <i data-lucide="send" class="ico"></i>
+                </button>
+            </div>
+            <p class="text-[10px] text-white/35 text-center mt-3">Ollama · локально</p>
+        </div>
+    </div>
+
+    <script>
+        // === ОБНОВЛЁННЫЙ СКРИПТ (включая старый + новый чат) ===
+
+        // Старый функционал корзины
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('transnafta_cart')) || [];
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        // === НОВЫЙ ЧАТ С OLLAMA ===
+        let messages = [
+            {
+                role: "system",
+                content: "Ты — дружелюбный и профессиональный ассистент поддержки компании ТрансНафта. Ты помогаешь с вопросами о автомобильных, контейнерных и рефрижераторных перевозках по России. Отвечай только на русском языке, кратко, по делу, в дружелюбном тоне. Если спрашивают о стоимости — предлагай перейти в калькулятор. Никогда не придумывай информацию."
+            },
+            {
+                role: "assistant",
+                content: "Здравствуйте! Я помощник ТрансНафта. Спросите о доставке, сроках, типе груза или расчёте — подскажу, куда перейти на сайте."
+            }
+        ];
+
+        const chatButton = document.getElementById('chat-button');
+        const chatWindow = document.getElementById('chat-window');
+        const closeChat = document.getElementById('close-chat');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+
+        // Рендер сообщений
+        function renderMessages() {
+            chatMessages.innerHTML = '';
+            
+            // Показываем все сообщения кроме system
+            messages.slice(1).forEach(msg => {
+                const isUser = msg.role === 'user';
+                const messageHTML = `
+                    <div class="flex ${isUser ? 'justify-end' : 'justify-start'} chat-message">
+                        <div class="max-w-[85%] rounded-3xl px-5 py-3 
+                                    ${isUser 
+                                        ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-medium' 
+                                        : 'bg-white/8 text-white border border-white/10'}">
+                            ${msg.content}
+                        </div>
+                    </div>`;
+                chatMessages.insertAdjacentHTML('beforeend', messageHTML);
+            });
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Отправка сообщения в Ollama
+        async function sendToOllama() {
+            const userText = chatInput.value.trim();
+            if (!userText) return;
+
+            // Добавляем сообщение пользователя
+            messages.push({ role: "user", content: userText });
+            renderMessages();
+            chatInput.value = '';
+
+            // Показываем индикатор "печатает"
+            const typingHTML = `
+                <div id="typing-indicator" class="flex justify-start chat-message">
+                    <div class="bg-white/10 text-white border border-white/10 rounded-3xl px-5 py-3 flex items-center gap-2">
+                        <span class="animate-pulse">●●●</span>
+                        <span class="text-xs opacity-70">думает...</span>
+                    </div>
+                </div>`;
+            chatMessages.insertAdjacentHTML('beforeend', typingHTML);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const response = await fetch('http://localhost:11434/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'qwen2.5',           // ← Измените, если у вас другой тег модели (qwen2.5:7b и т.д.)
+                        messages: messages,
+                        stream: false,
+                        temperature: 0.7,
+                        top_p: 0.9
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ollama не отвечает');
+                }
+
+                const data = await response.json();
+                const aiText = data.message.content;
+
+                // Удаляем индикатор печатает
+                const typingEl = document.getElementById('typing-indicator');
+                if (typingEl) typingEl.remove();
+
+                // Добавляем ответ ИИ
+                messages.push({ role: "assistant", content: aiText });
+                renderMessages();
+
+            } catch (error) {
+                console.error(error);
+                
+                // Удаляем индикатор печатает
+                const typingEl = document.getElementById('typing-indicator');
+                if (typingEl) typingEl.remove();
+
+                const errorHTML = `
+                    <div class="flex justify-start chat-message">
+                        <div class="bg-red-500/90 text-white rounded-3xl px-5 py-3 text-sm">
+                            ⚠️ Не удалось связаться с Ollama.<br>
+                            Убедитесь, что:<br>
+                            • Ollama запущен<br>
+                            • Модель <strong>qwen2.5</strong> загружена<br>
+                            • Адрес: http://localhost:11434
+                        </div>
+                    </div>`;
+                chatMessages.insertAdjacentHTML('beforeend', errorHTML);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        // Обработчики событий чата
+        function initChat() {
+            if (!chatButton || !chatWindow || !closeChat || !chatMessages || !chatInput || !sendButton) {
+                console.warn('[chat] Не найдены элементы чата на странице');
+                return;
+            }
+            if (chatButton.dataset.chatReady === '1') return;
+            chatButton.dataset.chatReady = '1';
+
+            chatButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const opening = chatWindow.classList.contains('hidden');
+                chatWindow.classList.toggle('hidden');
+                if (opening) {
+                    renderMessages();
+                    if (typeof refreshIcons === 'function') refreshIcons();
+                    chatInput.focus();
+                }
+            });
+
+            closeChat.addEventListener('click', (e) => {
+                e.preventDefault();
+                chatWindow.classList.add('hidden');
+            });
+
+            sendButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                sendToOllama();
+            });
+
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendToOllama();
+                }
+            });
+        }
+
+        function bootIndexPage() {
+            try {
+                updateCartCount();
+            } catch (e) {
+                console.warn('[cart]', e);
+            }
+            initChat();
+            if (typeof refreshIcons === 'function') refreshIcons();
+        }
+
+        if (document.readyState === 'complete') {
+            bootIndexPage();
+        } else {
+            window.addEventListener('load', bootIndexPage);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: transnafta
+    env: node
+    # Для SQLite нужен постоянный диск; на бесплатных тарифах данные могут сбрасываться.
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_PATH
+        value: /var/data/transnafta.db
+      - key: ADMIN_PANEL_USER
+        value: admin
+      - key: ADMIN_PANEL_PASSWORD
+        sync: false
+    disk:
+      name: transnafta-data
+      mountPath: /var/data
+      sizeGB: 1

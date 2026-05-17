@@ -1,0 +1,13 @@
+node_modules/
+npm-debug.log*
+
+.env
+admin-login.json
+
+transnafta.db
+transnafta.db-*
+*.sqlite
+*.sqlite3
+
+.DS_Store
+Thumbs.db

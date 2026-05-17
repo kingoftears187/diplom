@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина — ТрансНафта</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="theme.css">
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <script src="api-base.js"></script>
+    <script src="icons-init.js" defer></script>
+    <script src="tracker.js"></script>
+    <script src="auth.js"></script>
+    <script src="mobile-menu.js"></script>
+</head>
+<body>
+    <nav class="tn-nav">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                <div class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></div>
+                <div>
+                    <div class="heading text-2xl sm:text-3xl font-bold tracking-tight">ТрансНафта</div>
+                    <span class="block text-[0.62rem] font-semibold text-[color:var(--muted)] uppercase tracking-[0.2em]">логистика</span>
+                </div>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="services.html" class="nav-link">Услуги</a>
+                <a href="calculator.html" class="nav-link">Калькулятор</a>
+                <a href="about.html" class="nav-link">О компании</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="admin.html" class="tn-icon-btn" title="Админ"><i data-lucide="shield-check" class="ico ico-nav"></i></a>
+                <a href="cabinet.html" class="hidden sm:flex tn-icon-btn"><i data-lucide="user-circle" class="ico ico-nav"></i><span class="hidden lg:inline font-semibold text-sm">Кабинет</span></a>
+                <a href="cart.html" class="tn-cart-btn">
+                    <i data-lucide="shopping-bag" class="ico ico-nav"></i>
+                    <span class="hidden sm:inline">Корзина</span>
+                    <span id="cartCount">0</span>
+                </a>
+                <button type="button" id="mobileMenuBtn" class="md:hidden"><i data-lucide="menu" class="ico ico-nav"></i></button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden">
+            <nav class="tn-container py-4 flex flex-col gap-1">
+                <a href="index.html">Главная</a>
+                <a href="services.html">Услуги</a>
+                <a href="calculator.html">Калькулятор</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+                <hr class="border-white/10 my-2 opacity-40">
+                <a href="cabinet.html"><i data-lucide="user-circle" class="ico ico-sm inline align-middle mr-2"></i>Личный кабинет</a>
+            </nav>
+        </div>
+    </nav>
+
+    <main class="cart-page">
+        <header class="cart-hero tn-page-hero">
+            <div class="relative z-10">
+                <p class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[color:var(--accent-bright)] mb-3">
+                    <i data-lucide="clipboard-list" class="ico ico-sm"></i> Заявки
+                </p>
+                <h1 class="heading gradient-text">Корзина расчётов</h1>
+                <p>Соберите маршруты из калькулятора, проверьте сумму и отправьте всё одной заявкой — менеджер ответит в течение 30 минут.</p>
+            </div>
+        </header>
+
+        <div class="cart-layout">
+            <div>
+                <div id="cartItems" class="min-h-[200px]"></div>
+            </div>
+            <aside class="cart-summary">
+                <div class="cart-summary-total-row">
+                    <span>Итого</span>
+                    <span id="cartTotal" class="gradient-text">0 ₽</span>
+                </div>
+                <p class="text-sm text-[color:var(--muted)] mb-4">Цены ориентировочные по калькулятору. Финальная ставка после согласования.</p>
+                <button type="button" onclick="submitAllOrders()" class="cart-checkout">
+                    <i data-lucide="send" class="ico"></i>
+                    Оформить все заявки
+                </button>
+                <div class="cart-trust">
+                    <i data-lucide="lock" class="ico ico-sm inline mr-1 align-middle"></i>
+                    Данные используются только для связи по заявке. Оплата — по договору.
+                </div>
+                <a href="calculator.html" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--accent-2)] hover:underline w-full justify-center">
+                    <i data-lucide="calculator" class="ico ico-sm"></i> Добавить расчёт
+                </a>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-footer-deck">
+            <section class="site-footer-inner">
+                <article class="site-footer-brand">
+                    <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                        <span class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></span>
+                        <span class="tn-logo-text">ТрансНафта<span>логистика по России</span></span>
+                    </a>
+                    <p class="tn-footer-tagline">Надёжные грузоперевозки по всей России. Расчёт, оформление и контроль доставки в одном контуре.</p>
+                    <div class="tn-footer-meta">
+                        <span class="site-footer-chip">24/7 диспетчер</span>
+                        <span class="site-footer-chip site-footer-chip--warm">с 2009 года</span>
+                    </div>
+                </article>
+                <article>
+                    <h4>Навигация</h4>
+                    <a href="services.html">Услуги</a>
+                    <a href="calculator.html">Калькулятор</a>
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                </article>
+                <article>
+                    <h4>Клиентам</h4>
+                    <a href="cabinet.html">Личный кабинет</a>
+                    <a href="cart.html">Корзина</a>
+                    <a href="calculator.html">Рассчитать доставку</a>
+                </article>
+                <div class="site-footer-route" aria-hidden="true">
+                    <span>Терминал</span>
+                    <span class="site-footer-route-line"></span>
+                    <span>Маршрут · RU</span>
+                </div>
+            </section>
+            <div class="site-footer-bottom">
+                <p>© 2026 ТрансНафта. Все права защищены.</p>
+                <span class="site-footer-slot">TN-FTR-2026 · ISO-DOCK</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('transnafta_cart')) || [];
+            const el = document.getElementById('cartCount');
+            if (el) el.textContent = cart.length;
+        }
+
+        let cart = JSON.parse(localStorage.getItem('transnafta_cart')) || [];
+
+        function renderCart() {
+            const container = document.getElementById('cartItems');
+            let html = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                html = `
+                <div class="cart-empty">
+                    <div class="cart-empty-icon"><i data-lucide="package-open" class="ico-xl"></i></div>
+                    <h2>Пока пусто</h2>
+                    <p>Добавьте расчёт доставки из калькулятора — он появится здесь списком маршрутов.</p>
+                    <a href="calculator.html" class="tn-btn-primary inline-flex">В калькулятор</a>
+                </div>`;
+            } else {
+                cart.forEach((item, index) => {
+                    const priceNumber = parseInt(String(item.price).replace(/\D/g, '')) || 0;
+                    total += priceNumber;
+                    const cargo = item.cargoType || 'общий';
+                    html += `
+                    <article class="cart-line">
+                        <div>
+                            <div class="cart-route">
+                                <i data-lucide="map-pin" class="ico text-[color:var(--accent-2)]"></i>
+                                <span>${item.from}</span>
+                                <span class="arrow"><i data-lucide="arrow-right" class="ico ico-sm"></i></span>
+                                <span>${item.to}</span>
+                            </div>
+                            <div class="cart-meta">
+                                <div class="cart-meta-item">
+                                    <i data-lucide="weight" class="ico ico-sm mt-0.5 text-[color:var(--accent-bright)]"></i>
+                                    <div><strong>Вес</strong>${item.weight} т</div>
+                                </div>
+                                <div class="cart-meta-item">
+                                    <i data-lucide="box" class="ico ico-sm mt-0.5 text-[color:var(--accent-bright)]"></i>
+                                    <div><strong>Объём</strong>${item.volume} м³</div>
+                                </div>
+                                <div class="cart-meta-item">
+                                    <i data-lucide="tags" class="ico ico-sm mt-0.5 text-[color:var(--accent-bright)]"></i>
+                                    <div><strong>Тип</strong>${cargo}</div>
+                                </div>
+                                <div class="cart-meta-item">
+                                    <i data-lucide="calendar" class="ico ico-sm mt-0.5 text-[color:var(--accent-bright)]"></i>
+                                    <div><strong>Дата</strong>${item.date}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cart-price-block">
+                            <div class="cart-price">${item.price}</div>
+                            <button type="button" class="cart-remove" onclick="removeFromCart(${index})">
+                                <i data-lucide="trash-2" class="ico ico-sm"></i>
+                                Удалить
+                            </button>
+                        </div>
+                    </article>`;
+                });
+            }
+            container.innerHTML = html;
+            document.getElementById('cartTotal').textContent = total.toLocaleString('ru-RU') + ' ₽';
+            updateCartCount();
+            if (typeof refreshIcons === 'function') refreshIcons();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('transnafta_cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function parseJsonResponse(r, rawText) {
+            try {
+                return JSON.parse(rawText);
+            } catch (ex) {
+                if (rawText.trim().startsWith('<!DOCTYPE') || rawText.trim().startsWith('<html')) {
+                    throw new Error(
+                        'Пришла HTML-страница вместо ответа API — запрос ушёл не на сервер Node. ' +
+                            'Откройте сайт именно через http://localhost:3000/… или добавьте в <head> мета-тег tn-api-origin (см. комментарий в api-base.js).'
+                    );
+                }
+                throw new Error(rawText.slice(0, 120) || ex.message);
+            }
+        }
+
+        function tnStableVisitorKey() {
+            try {
+                if (window.sessionTracker && window.sessionTracker.visitorKey)
+                    return String(window.sessionTracker.visitorKey);
+                if (typeof window.getOrCreateVisitorKey === 'function')
+                    return String(window.getOrCreateVisitorKey());
+            } catch (_) {}
+            try {
+                return localStorage.getItem('current_user_id') || '';
+            } catch (_) {
+                return '';
+            }
+        }
+
+        function tnStableSessionToken() {
+            try {
+                if (window.sessionTracker && window.sessionTracker.sessionId)
+                    return String(window.sessionTracker.sessionId);
+                if (typeof window.getOrCreateSessionId === 'function')
+                    return String(window.getOrCreateSessionId());
+            } catch (_) {}
+            try {
+                return localStorage.getItem('current_session_id') || '';
+            } catch (_) {
+                return '';
+            }
+        }
+
+        async function submitAllOrders() {
+            if (cart.length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+
+            let userId = null;
+            let clientEmail = '';
+            try {
+                const cu = localStorage.getItem('current_user');
+                if (cu) {
+                    const u = JSON.parse(cu);
+                    const rawId = u && (u.id != null ? u.id : u.userId);
+                    if (rawId != null && rawId !== '') userId = parseInt(String(rawId), 10);
+                    if (!Number.isFinite(userId)) userId = null;
+                    if (u.email) clientEmail = String(u.email).trim();
+                }
+            } catch (_) {}
+
+            const payload = {
+                session_token: tnStableSessionToken(),
+                visitor_key: tnStableVisitorKey(),
+                user_id: userId,
+                client_email: clientEmail,
+                items: cart.map((i) => ({
+                    from: i.from,
+                    to: i.to,
+                    cargoType: i.cargoType,
+                    weight: i.weight,
+                    volume: i.volume,
+                    price: i.price,
+                    priceAmount: typeof i.priceAmount === 'number' ? i.priceAmount : parseInt(String(i.price).replace(/\D/g, ''), 10) || 0
+                }))
+            };
+
+            try {
+                const api = typeof getApiSiteOrigin === 'function' ? getApiSiteOrigin() : window.location.origin;
+                const r = await fetch(api + '/api/orders/batch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const txt = await r.text();
+                const j = parseJsonResponse(r, txt);
+                if (!r.ok) throw new Error(j.message || j.error || 'Сервер отклонил заявку');
+
+                if (window.sessionTracker) {
+                    window.sessionTracker.recordAction('orders_batch_submitted', { count: cart.length });
+                }
+
+                const nums = (j.created || []).map((x) => x.order_number).filter(Boolean);
+                alert('Заявки сохранены в базе данных.\nНомера: ' + (nums.length ? nums.join(', ') : '(см. таблицу orders)'));
+                cart = [];
+                localStorage.setItem('transnafta_cart', JSON.stringify(cart));
+                renderCart();
+            } catch (e) {
+                alert(
+                    'Не удалось отправить заявки.\nУбедитесь, что выполнен запуск `npm start`, и вы открываете сайт по адресу http://localhost:3000\n\n' +
+                        e.message
+                );
+            }
+        }
+
+        window.onload = renderCart;
+    </script>
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет — ТрансНафта</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="theme.css">
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <script src="api-base.js"></script>
+    <script src="icons-init.js" defer></script>
+    <script src="tracker.js"></script>
+    <script src="api-client.js"></script>
+    <script src="auth.js"></script>
+    <script src="mobile-menu.js"></script>
+</head>
+<body>
+    <nav class="tn-nav">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                <div class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></div>
+                <div>
+                    <div class="heading text-2xl sm:text-3xl font-bold tracking-tight">ТрансНафта</div>
+                    <span class="block text-[0.62rem] font-semibold text-[color:var(--muted)] uppercase tracking-[0.2em]">логистика</span>
+                </div>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="services.html" class="nav-link">Услуги</a>
+                <a href="calculator.html" class="nav-link">Калькулятор</a>
+                <a href="about.html" class="nav-link">О компании</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="admin.html" class="tn-icon-btn" title="Админ панель"><i data-lucide="shield-check" class="ico ico-nav"></i></a>
+                <a href="cabinet.html" class="hidden sm:flex tn-icon-btn"><i data-lucide="user-circle" class="ico ico-nav"></i><span class="hidden sm:inline font-semibold text-sm">Кабинет</span></a>
+                <a href="cart.html" class="tn-cart-btn">
+                    <i data-lucide="shopping-bag" class="ico ico-nav"></i>
+                    <span class="hidden sm:inline">Корзина</span>
+                    <span id="cartCount">0</span>
+                </a>
+                <button type="button" id="mobileMenuBtn" class="md:hidden"><i data-lucide="menu" class="ico ico-nav"></i></button>
+            </div>
+        </div>
+        
+        <div id="mobileMenu" class="hidden md:hidden">
+            <nav class="tn-container py-4 flex flex-col gap-1">
+                <a href="index.html">Главная</a>
+                <a href="services.html">Услуги</a>
+                <a href="calculator.html">Калькулятор</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+                <hr class="border-white/10 my-2 opacity-40">
+                <a href="cabinet.html"><i data-lucide="user-circle" class="ico ico-sm inline align-middle mr-2"></i>Личный кабинет</a>
+            </nav>
+        </div>
+    </nav>
+
+    <div class="min-h-screen py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- ЗАГОЛОВОК -->
+            <div id="notLoggedIn" class="text-center">
+                <h1 class="heading text-5xl font-bold mb-6 gradient-text">Личный кабинет</h1>
+                <p class="text-xl text-white/70 mb-12">Пожалуйста, войдите или зарегистрируйтесь</p>
+
+                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- ФОРМА ВХОДА -->
+                    <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                        <h2 class="text-3xl font-bold text-[#00d4ff] mb-6">Вход</h2>
+                        <form onsubmit="handleLogin(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-white/70 mb-2">Email</label>
+                                <input type="email" id="loginEmail" placeholder="your@email.com" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" required>
+                            </div>
+                            <div>
+                                <label class="block text-white/70 mb-2">Пароль</label>
+                                <input type="password" id="loginPassword" placeholder="••••••••" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" required>
+                            </div>
+                            <button type="submit" class="w-full bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] py-3 rounded-lg font-semibold hover:scale-105 transition">
+                                Войти
+                            </button>
+                        </form>
+                        <div id="loginError" class="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm hidden"></div>
+                    </div>
+
+                    <!-- ФОРМА РЕГИСТРАЦИИ -->
+                    <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                        <h2 class="text-3xl font-bold text-[#ff8c00] mb-6">Регистрация</h2>
+                        <form onsubmit="handleRegister(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-white/70 mb-2">ФИО</label>
+                                <input type="text" id="registerName" placeholder="Иван Петров" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" required>
+                            </div>
+                            <div>
+                                <label class="block text-white/70 mb-2">Email</label>
+                                <input type="email" id="registerEmail" placeholder="your@email.com" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" required>
+                            </div>
+                            <div>
+                                <label class="block text-white/70 mb-2">Пароль</label>
+                                <input type="password" id="registerPassword" placeholder="••••••••" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" required>
+                            </div>
+                            <div>
+                                <label class="block text-white/70 mb-2">Телефон</label>
+                                <input type="tel" id="registerPhone" placeholder="+7 (999) 123-45-67" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]">
+                            </div>
+                            <button type="submit" class="w-full bg-gradient-to-r from-[#ff8c00] to-[#00d4ff] text-[#001f3f] py-3 rounded-lg font-semibold hover:scale-105 transition">
+                                Зарегистрироваться
+                            </button>
+                        </form>
+                        <div id="registerError" class="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm hidden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ЛИЧНЫЙ КАБИНЕТ (показывается после входа) -->
+            <div id="loggedInContent" class="hidden">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-6">
+                        <div id="userAvatar" class="w-20 h-20 bg-gradient-to-br from-[#00d4ff] to-[#ff8c00] rounded-full flex items-center justify-center text-4xl font-bold"></div>
+                        <div>
+                            <h1 id="userName" class="heading text-4xl font-bold gradient-text"></h1>
+                            <p id="userEmail" class="text-white/70"></p>
+                            <p id="userPhone" class="text-white/60 text-sm"></p>
+                        </div>
+                    </div>
+                    <button onclick="showEditProfile()" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-2xl transition">
+                        <i data-lucide="pencil" class="ico ico-sm"></i>Редактировать
+                    </button>
+                </div>
+
+                <!-- ВКЛАДКИ -->
+                <div class="flex flex-wrap gap-4 mb-8 border-b border-white/10">
+                    <button type="button" onclick="switchCabinetTab('orders', event)" class="tab-btn active px-6 py-3 font-semibold inline-flex items-center gap-2">
+                        <i data-lucide="package" class="ico ico-sm"></i>Мои заказы
+                    </button>
+                    <button type="button" onclick="switchCabinetTab('profile', event)" class="tab-btn px-6 py-3 font-semibold inline-flex items-center gap-2">
+                        <i data-lucide="user" class="ico ico-sm"></i>Профиль
+                    </button>
+                    <button type="button" onclick="switchCabinetTab('payments', event)" class="tab-btn px-6 py-3 font-semibold inline-flex items-center gap-2">
+                        <i data-lucide="credit-card" class="ico ico-sm"></i>Оплата
+                    </button>
+                    <button type="button" onclick="switchCabinetTab('settings', event)" class="tab-btn px-6 py-3 font-semibold inline-flex items-center gap-2">
+                        <i data-lucide="settings" class="ico ico-sm"></i>Настройки
+                    </button>
+                </div>
+
+                <!-- ВКЛАДКАорДЕРА -->
+                <div id="ordersTab" class="tab-content">
+                    <h2 class="text-3xl font-bold mb-6">Мои заказы</h2>
+                    <div id="ordersList" class="space-y-4"></div>
+                </div>
+
+                <!-- ВКЛАДКА ПРОФИЛЬ -->
+                <div id="profileTab" class="tab-content hidden">
+                    <h2 class="text-3xl font-bold mb-6">Информация профиля</h2>
+                    <div class="card-glowing rounded-3xl p-8 border border-white/10 max-w-2xl">
+                        <form onsubmit="saveProfile(event)" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-white/70 mb-2">ФИО</label>
+                                    <input type="text" id="profileName" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-white/70 mb-2">Email</label>
+                                    <input type="email" id="profileEmail" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" readonly>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-white/70 mb-2">Телефон</label>
+                                <input type="tel" id="profilePhone" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]">
+                            </div>
+                            <div>
+                                <label class="block text-white/70 mb-2">Компания</label>
+                                <input type="text" id="profileCompany" placeholder="Название компании" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]">
+                            </div>
+                            <div>
+                                <label class="block text-white/70 mb-2">Адрес</label>
+                                <input type="text" id="profileAddress" placeholder="Адрес доставки" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]">
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-white/70 mb-2">ИНН</label>
+                                    <input type="text" id="profileInn" placeholder="10 цифр" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]">
+                                </div>
+                                <div>
+                                    <label class="block text-white/70 mb-2">КПП</label>
+                                    <input type="text" id="profileKpp" placeholder="9 цифр" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]">
+                                </div>
+                            </div>
+                            <button type="submit" class="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] py-3 rounded-lg font-semibold hover:scale-105 transition">
+                                <i data-lucide="save" class="ico ico-sm"></i>Сохранить
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ВКЛАДКА ОПЛАТА -->
+                <div id="paymentsTab" class="tab-content hidden">
+                    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-8">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-2">Способы оплаты</h2>
+                            <p class="text-white/60">Привязанные карты используются для быстрой оплаты заказов в личном кабинете.</p>
+                        </div>
+                        <div class="inline-flex items-center gap-2 text-sm text-white/50">
+                            <i data-lucide="lock-keyhole" class="ico ico-sm text-[#00d4ff]"></i>
+                            Полный номер карты не сохраняется
+                        </div>
+                    </div>
+
+                    <div class="grid lg:grid-cols-[1fr_420px] gap-8">
+                        <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                            <h3 class="text-2xl font-semibold text-[#00d4ff] mb-6">Мои карты</h3>
+                            <div id="paymentMethodsList" class="space-y-4"></div>
+                        </div>
+
+                        <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                            <h3 class="text-2xl font-semibold text-[#ff8c00] mb-6">Привязать карту</h3>
+                            <form onsubmit="addPaymentMethod(event)" class="space-y-4">
+                                <div>
+                                    <label class="block text-white/70 mb-2">Номер карты</label>
+                                    <input type="text" id="cardNumber" inputmode="numeric" maxlength="23" placeholder="2200 0000 0000 0053" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" required>
+                                </div>
+                                <div>
+                                    <label class="block text-white/70 mb-2">Имя держателя</label>
+                                    <input type="text" id="cardHolder" placeholder="IVAN IVANOV" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white uppercase outline-none focus:border-[#00d4ff]" required>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-white/70 mb-2">Месяц</label>
+                                        <input type="number" id="cardExpMonth" min="1" max="12" placeholder="12" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-white/70 mb-2">Год</label>
+                                        <input type="number" id="cardExpYear" min="2026" max="2045" placeholder="2029" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" required>
+                                    </div>
+                                </div>
+                                <label class="flex items-center gap-3 text-white/70 text-sm">
+                                    <input type="checkbox" id="cardDefault" class="accent-[#00d4ff]">
+                                    Сделать картой по умолчанию
+                                </label>
+                                <button type="submit" class="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] py-3 rounded-lg font-semibold hover:scale-105 transition">
+                                    <i data-lucide="plus" class="ico ico-sm"></i>Привязать карту
+                                </button>
+                                <p class="text-xs text-white/45">Это демонстрационная оплата для дипломного проекта. CVC не запрашивается, списания денег не происходит.</p>
+                            </form>
+                            <div id="paymentError" class="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm hidden"></div>
+                            <div id="paymentSuccess" class="mt-4 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-300 text-sm hidden"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ВКЛАДКА НАСТРОЙКИ -->
+                <div id="settingsTab" class="tab-content hidden">
+                    <h2 class="text-3xl font-bold mb-6">Настройки аккаунта</h2>
+                    <div class="card-glowing rounded-3xl p-8 border border-white/10 max-w-2xl space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold text-[#00d4ff] mb-4">Безопасность</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                                    <span>Получать уведомления на email</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00d4ff]"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                                    <span>Получать SMS уведомления</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00d4ff]"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-[#ff8c00] mb-4">Опасная зона</h3>
+                            <button onclick="changePassword()" class="inline-flex items-center gap-2 px-6 py-3 border border-yellow-500/30 text-yellow-500 rounded-lg hover:bg-yellow-500/10 transition">
+                                <i data-lucide="key-round" class="ico ico-sm"></i>Изменить пароль
+                            </button>
+                            <button onclick="deleteAccount()" class="inline-flex items-center gap-2 ml-4 px-6 py-3 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/10 transition">
+                                <i data-lucide="trash-2" class="ico ico-sm"></i>Удалить аккаунт
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer mt-20">
+        <div class="site-footer-deck">
+            <section class="site-footer-inner">
+                <article class="site-footer-brand">
+                    <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                        <span class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></span>
+                        <span class="tn-logo-text">ТрансНафта<span>логистика по России</span></span>
+                    </a>
+                    <p class="tn-footer-tagline">Надёжные грузоперевозки по всей России. Расчёт, оформление и контроль доставки в одном контуре.</p>
+                    <div class="tn-footer-meta">
+                        <span class="site-footer-chip">24/7 диспетчер</span>
+                        <span class="site-footer-chip site-footer-chip--warm">с 2009 года</span>
+                    </div>
+                </article>
+                <article>
+                    <h4>Навигация</h4>
+                    <a href="services.html">Услуги</a>
+                    <a href="calculator.html">Калькулятор</a>
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                </article>
+                <article>
+                    <h4>Клиентам</h4>
+                    <a href="cabinet.html">Личный кабинет</a>
+                    <a href="cart.html">Корзина</a>
+                    <a href="calculator.html">Рассчитать доставку</a>
+                </article>
+                <div class="site-footer-route" aria-hidden="true">
+                    <span>Терминал</span>
+                    <span class="site-footer-route-line"></span>
+                    <span>Маршрут · RU</span>
+                </div>
+            </section>
+            <div class="site-footer-bottom">
+                <p>© 2026 ТрансНафта. Все права защищены.</p>
+                <span class="site-footer-slot">TN-FTR-2026 · ISO-DOCK</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentPaymentMethods = [];
+
+        // Проверяем аутентификацию при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            if (typeof refreshIcons === 'function') refreshIcons();
+            const cardNumberInput = document.getElementById('cardNumber');
+            if (cardNumberInput) {
+                cardNumberInput.addEventListener('input', () => {
+                    const digits = cardNumberInput.value.replace(/\D/g, '').slice(0, 19);
+                    cardNumberInput.value = digits.replace(/(.{4})/g, '$1 ').trim();
+                });
+            }
+            // Даем время скриптам загрузиться полностью
+            setTimeout(() => {
+                if (typeof authSystem !== 'undefined') {
+                    initCabinet();
+                } else {
+                    console.error('authSystem не загружена');
+                }
+            }, 100);
+        });
+
+        function getCabinetUserId() {
+            const user = authSystem.getCurrentUser();
+            if (!user) return null;
+            const rawId = user.id != null ? user.id : user.userId;
+            const numericId = typeof rawId === 'number' ? rawId : parseInt(String(rawId), 10);
+            return Number.isFinite(numericId) ? numericId : rawId;
+        }
+
+        function initCabinet() {
+            if (!authSystem.isAuthenticated()) {
+                document.getElementById('notLoggedIn').classList.remove('hidden');
+                document.getElementById('loggedInContent').classList.add('hidden');
+            } else {
+                showLoggedInContent();
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const result = await authSystem.login(email, password);
+
+            if (result.success) {
+                document.getElementById('loginError').classList.add('hidden');
+                showLoggedInContent();
+            } else {
+                document.getElementById('loginError').textContent = result.message;
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            const fullName = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const phone = document.getElementById('registerPhone').value;
+
+            const result = await authSystem.register(email, password, fullName, phone);
+
+            if (result.success) {
+                document.getElementById('registerError').classList.add('hidden');
+                alert('✓ ' + result.message + '\nТеперь вы можете войти');
+                document.getElementById('registerName').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerPhone').value = '';
+                initCabinet();
+            } else {
+                document.getElementById('registerError').textContent = result.message;
+                document.getElementById('registerError').classList.remove('hidden');
+            }
+        }
+
+        function showLoggedInContent() {
+            const user = authSystem.getCurrentUser();
+            document.getElementById('notLoggedIn').classList.add('hidden');
+            document.getElementById('loggedInContent').classList.remove('hidden');
+
+            // Заполняем данные пользователя
+            const avatar = (user.fullName && user.fullName.charAt(0) ? user.fullName.charAt(0) : '?').toUpperCase();
+            document.getElementById('userAvatar').textContent = avatar;
+            document.getElementById('userName').textContent = user.fullName;
+            document.getElementById('userEmail').textContent = user.email;
+
+            loadUserOrders();
+            loadUserProfile();
+            loadPaymentMethods();
+        }
+
+        async function loadUserOrders() {
+            const userId = getCabinetUserId();
+            if (!userId) return;
+
+            const orders = await apiClient.getUserOrders(userId);
+            const list = document.getElementById('ordersList');
+
+            if (!Array.isArray(orders) || orders.length === 0) {
+                list.innerHTML = '<div class="text-center text-white/60 py-12"><p class="text-lg">У вас нет заказов</p><a href="calculator.html" class="text-[#00d4ff] hover:underline mt-4 inline-block">Создать заказ</a></div>';
+                return;
+            }
+
+            list.innerHTML = orders.map(order => `
+                <div class="card-glowing rounded-2xl p-6 border border-white/10">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+                        <div>
+                            <h3 class="text-xl font-semibold text-[#00d4ff]">${order.orderNumber || 'Заказ'}</h3>
+                            <span class="text-sm text-white/60">${order.createdAt ? new Date(order.createdAt).toLocaleDateString('ru-RU') : '—'}</span>
+                        </div>
+                        ${order.paymentStatus === 'paid'
+                            ? '<span class="inline-flex items-center gap-2 text-emerald-300 bg-emerald-500/10 border border-emerald-500/25 px-3 py-2 rounded-xl text-sm"><i data-lucide="badge-check" class="ico ico-sm"></i>Оплачено</span>'
+                            : `<button type="button" onclick="payOrder('${String(order.orderNumber || '').replace(/'/g, "\\'")}')" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#00d4ff]/15 text-[#67e8f9] border border-[#00d4ff]/30 hover:bg-[#00d4ff]/25 transition"><i data-lucide="credit-card" class="ico ico-sm"></i>Оплатить</button>`
+                        }
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <p class="text-white/60">Маршрут</p>
+                            <p class="text-white">${order.fromRegion} → ${order.toRegion}</p>
+                        </div>
+                        <div>
+                            <p class="text-white/60">Стоимость</p>
+                            <p class="text-[#ff8c00] font-semibold">${order.price} ₽</p>
+                        </div>
+                        <div>
+                            <p class="text-white/60">Статус</p>
+                            <p class="text-white">${order.status || 'В обработке'}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            if (typeof refreshIcons === 'function') refreshIcons();
+        }
+
+        function loadUserProfile() {
+            const user = authSystem.getCurrentUser();
+            if (!user) return;
+
+            document.getElementById('profileName').value = user.fullName || '';
+            document.getElementById('profileEmail').value = user.email || '';
+            document.getElementById('profilePhone').value = '';
+        }
+
+        async function saveProfile(event) {
+            event.preventDefault();
+            const user = authSystem.getCurrentUser();
+            if (!user) return;
+
+            const updates = {
+                phone: document.getElementById('profilePhone')?.value || '',
+            };
+
+            const result = await authSystem.updateProfile(user.id, updates);
+            alert((result.success ? '✓ ' : '✗ ') + result.message);
+        }
+
+        function showPaymentMessage(type, message) {
+            const success = document.getElementById('paymentSuccess');
+            const error = document.getElementById('paymentError');
+            if (success) success.classList.add('hidden');
+            if (error) error.classList.add('hidden');
+            const target = type === 'success' ? success : error;
+            if (!target) return;
+            target.textContent = message;
+            target.classList.remove('hidden');
+        }
+
+        function formatCardExpiry(method) {
+            const month = String(method.expMonth || '').padStart(2, '0');
+            const year = String(method.expYear || '').slice(-2);
+            return `${month}/${year}`;
+        }
+
+        async function loadPaymentMethods() {
+            const userId = getCabinetUserId();
+            if (!userId) return;
+            currentPaymentMethods = await apiClient.getPaymentMethods(userId);
+            renderPaymentMethods();
+        }
+
+        function renderPaymentMethods() {
+            const list = document.getElementById('paymentMethodsList');
+            if (!list) return;
+            if (!Array.isArray(currentPaymentMethods) || currentPaymentMethods.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center text-white/60 py-10">
+                        <i data-lucide="credit-card" class="ico-xl mx-auto mb-4 text-white/35"></i>
+                        <p class="text-lg">У вас пока нет привязанных карт</p>
+                        <p class="text-sm mt-2">Добавьте карту справа, чтобы оплачивать заказы быстрее.</p>
+                    </div>
+                `;
+                if (typeof refreshIcons === 'function') refreshIcons();
+                return;
+            }
+
+            list.innerHTML = currentPaymentMethods.map(method => `
+                <div class="rounded-2xl border ${method.isDefault ? 'border-[#00d4ff]/45 bg-[#00d4ff]/10' : 'border-white/10 bg-white/5'} p-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-10 rounded-xl bg-gradient-to-br from-[#00d4ff] to-[#ff8c00] text-[#001f3f] flex items-center justify-center">
+                                <i data-lucide="credit-card" class="ico"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-white">${method.cardBrand || 'Карта'} · ${method.cardMask}</p>
+                                <p class="text-sm text-white/55">${method.holderName || 'Держатель не указан'} · до ${formatCardExpiry(method)}</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            ${method.isDefault ? '<span class="px-3 py-2 rounded-xl text-xs bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">По умолчанию</span>' : `<button type="button" onclick="setDefaultPaymentMethod(${method.id})" class="px-3 py-2 rounded-xl text-xs bg-white/10 hover:bg-white/15 transition">Сделать основной</button>`}
+                            <button type="button" onclick="deletePaymentMethod(${method.id})" class="px-3 py-2 rounded-xl text-xs text-red-300 border border-red-500/25 hover:bg-red-500/10 transition">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            if (typeof refreshIcons === 'function') refreshIcons();
+        }
+
+        async function addPaymentMethod(event) {
+            event.preventDefault();
+            const userId = getCabinetUserId();
+            if (!userId) return;
+            try {
+                const result = await apiClient.addPaymentMethod(userId, {
+                    card_number: document.getElementById('cardNumber').value,
+                    holder_name: document.getElementById('cardHolder').value,
+                    exp_month: document.getElementById('cardExpMonth').value,
+                    exp_year: document.getElementById('cardExpYear').value,
+                    is_default: document.getElementById('cardDefault').checked
+                });
+                event.target.reset();
+                showPaymentMessage('success', result.message || 'Карта привязана');
+                await loadPaymentMethods();
+            } catch (e) {
+                showPaymentMessage('error', e.message || 'Не удалось привязать карту');
+            }
+        }
+
+        async function setDefaultPaymentMethod(methodId) {
+            const userId = getCabinetUserId();
+            if (!userId) return;
+            try {
+                await apiClient.setDefaultPaymentMethod(userId, methodId);
+                await loadPaymentMethods();
+            } catch (e) {
+                alert('✗ ' + e.message);
+            }
+        }
+
+        async function deletePaymentMethod(methodId) {
+            const userId = getCabinetUserId();
+            if (!userId || !confirm('Удалить эту карту из способов оплаты?')) return;
+            try {
+                await apiClient.deletePaymentMethod(userId, methodId);
+                await loadPaymentMethods();
+            } catch (e) {
+                alert('✗ ' + e.message);
+            }
+        }
+
+        async function payOrder(orderNumber) {
+            const userId = getCabinetUserId();
+            if (!userId) return;
+            if (!currentPaymentMethods.length) await loadPaymentMethods();
+            const method = currentPaymentMethods.find(m => m.isDefault) || currentPaymentMethods[0];
+            if (!method) {
+                alert('Сначала привяжите банковскую карту');
+                switchCabinetTab('payments');
+                return;
+            }
+            if (!confirm(`Оплатить заказ ${orderNumber} картой ${method.cardMask}?`)) return;
+            try {
+                const result = await apiClient.payOrder(userId, orderNumber, method.id);
+                alert('✓ ' + (result.message || 'Оплата прошла успешно'));
+                await loadUserOrders();
+            } catch (e) {
+                alert('✗ ' + e.message);
+            }
+        }
+
+        function switchCabinetTab(tabName, ev) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            let btn =
+                ev && ev.currentTarget instanceof Element
+                    ? ev.currentTarget
+                    : typeof ev?.target?.closest === 'function'
+                      ? ev.target.closest('.tab-btn')
+                      : null;
+            if (btn && btn.classList) btn.classList.add('active');
+            else {
+                document.querySelectorAll('.tab-btn').forEach(el => {
+                    const oc = el.getAttribute('onclick') || '';
+                    if (oc.includes("'"+tabName+"'") || oc.includes('"'+tabName+'"'))
+                        el.classList.add('active');
+                });
+            }
+            if (tabName === 'orders') loadUserOrders();
+            if (tabName === 'payments') loadPaymentMethods();
+            if (typeof refreshIcons === 'function') refreshIcons();
+        }
+
+        function showEditProfile() {
+            switchCabinetTab('profile');
+        }
+
+        function changePassword() {
+            alert('Функция изменения пароля будет реализована в скором времени');
+        }
+
+        function deleteAccount() {
+            if (confirm('Вы уверены? Это действие необратимо!')) {
+                alert('Аккаунт удален');
+                logoutUser();
+            }
+        }
+
+        async function logoutUser() {
+            await authSystem.logout();
+            window.location.href = 'cabinet.html';
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('transnafta_cart')) || [];
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+    </script>
+</body>
+</html>

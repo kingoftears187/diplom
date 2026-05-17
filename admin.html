@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ панель — ТрансНафта</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="theme.css">
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <script src="api-base.js"></script>
+    <script src="icons-init.js" defer></script>
+    <script src="tracker.js"></script>
+    <script src="auth.js"></script>
+    <script src="mobile-menu.js"></script>
+    <style>.pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .stat-box { background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(255,140,0,0.05)); }
+        .user-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .status-active { background: rgba(34,197,94,0.2); color: #22c55e; }
+        .status-inactive { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .status-pending { background: rgba(249,115,22,0.2); color: #f97316; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+    <!-- Вход в админ-панель (API защищён на сервере) -->
+    <div id="adminLoginGate" class="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-[#030712]/95 backdrop-blur-md">
+        <div class="w-full max-w-md card-glowing rounded-3xl border border-white/15 p-8 shadow-2xl">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#22d3ee]/30 to-[#a78bfa]/25 flex items-center justify-center border border-white/10">
+                    <i data-lucide="shield-check" class="ico ico-xl text-[#67e8f9]"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white">Доступ администратора</h1>
+                    <p class="text-xs text-white/55">Логин и пароль задаются на сервере (переменные окружения)</p>
+                    <p class="text-[0.65rem] text-white/40 mt-2">После <code class="text-[#67e8f9]/90">npm start</code> в терминале показан активный логин и подсказка по паролю. Можно положить файл <code class="text-white/55">admin-login.json</code> рядом с <code class="text-white/55">server.js</code> (образец — <code class="text-white/55">admin-login.json.example</code>).</p>
+                </div>
+            </div>
+            <form id="adminLoginForm" class="space-y-4" autocomplete="off" onsubmit="submitAdminLogin(event)">
+                <div>
+                    <label class="block text-sm text-white/65 mb-1">Логин</label>
+                    <input id="adminUser" name="username" required class="w-full rounded-xl border border-white/15 bg-black/35 px-4 py-3 text-white outline-none focus:border-[#22d3ee]" />
+                </div>
+                <div>
+                    <label class="block text-sm text-white/65 mb-1">Пароль</label>
+                    <input id="adminPass" name="password" type="password" required class="w-full rounded-xl border border-white/15 bg-black/35 px-4 py-3 text-white outline-none focus:border-[#22d3ee]" />
+                </div>
+                <p id="adminLoginErr" class="hidden text-sm text-red-400 bg-red-500/10 border border-red-500/25 rounded-xl px-3 py-2"></p>
+                <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001423] py-3 font-semibold hover:brightness-105 transition">
+                    Войти в панель
+                </button>
+            </form>
+            <a href="index.html" class="mt-6 block text-center text-sm text-white/50 hover:text-white/80 transition">На главную</a>
+        </div>
+    </div>
+
+    <div id="adminShell" class="hidden min-h-screen flex flex-col">
+    <!-- НАВИГАЦИЯ -->
+    <nav class="tn-nav">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                <div class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></div>
+                <div>
+                    <div class="heading text-3xl font-bold tracking-tight">ТрансНафта</div>
+                    <span class="block text-[0.62rem] font-semibold text-[color:var(--muted)] uppercase tracking-[0.2em]">админ</span>
+                </div>
+            </a>
+            <div class="flex items-center gap-6">
+                <span class="text-white/70">Админ панель</span>
+                <button type="button" onclick="adminPanelLogout()" class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl hover:bg-white/10 transition text-red-400">
+                    <i data-lucide="log-out" class="ico ico-nav"></i> Выход
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- БОКОВАЯ ПАНЕЛЬ -->
+        <aside class="sidebar hidden md:block w-64 border-r border-white/10 overflow-y-auto">
+            <div class="p-6">
+                <h3 class="text-sm font-semibold text-white/60 uppercase tracking-wider mb-6">Меню</h3>
+                <nav class="space-y-3">
+                    <a href="#dashboard" onclick="switchTab('dashboard')" class="sidebar-item active px-4 py-3 rounded-lg flex items-center gap-3">
+                        <i data-lucide="line-chart" class="ico ico-nav text-[#22d3ee]"></i>
+                        <span>Статистика</span>
+                    </a>
+                    <a href="#sessions" onclick="switchTab('sessions')" class="sidebar-item px-4 py-3 rounded-lg flex items-center gap-3">
+                        <i data-lucide="radar" class="ico ico-nav text-[#fb923c]"></i>
+                        <span>Визиты и входы</span>
+                    </a>
+                    <a href="#users" onclick="switchTab('users')" class="sidebar-item px-4 py-3 rounded-lg flex items-center gap-3">
+                        <i data-lucide="users" class="ico ico-nav text-[#22d3ee]"></i>
+                        <span>Пользователи</span>
+                    </a>
+                    <a href="#orders" onclick="switchTab('orders')" class="sidebar-item px-4 py-3 rounded-lg flex items-center gap-3">
+                        <i data-lucide="package" class="ico ico-nav text-[#fb923c]"></i>
+                        <span>Заказы</span>
+                    </a>
+                    <a href="#logs" onclick="switchTab('logs')" class="sidebar-item px-4 py-3 rounded-lg flex items-center gap-3">
+                        <i data-lucide="list" class="ico ico-nav text-[#22d3ee]"></i>
+                        <span>Логи действий</span>
+                    </a>
+                    <a href="#contactsTab" onclick="switchTab('contactsTab')" class="sidebar-item px-4 py-3 rounded-lg flex items-center gap-3">
+                        <i data-lucide="mail" class="ico ico-nav text-[#a78bfa]"></i>
+                        <span>Обращения</span>
+                    </a>
+                    <a href="#settings" onclick="switchTab('settings')" class="sidebar-item px-4 py-3 rounded-lg flex items-center gap-3">
+                        <i data-lucide="settings" class="ico ico-nav text-[#fb923c]"></i>
+                        <span>Настройки</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+        
+        <!-- МОБИЛЬНОЕ МЕНЮ АДМИН-ПАНЕЛИ -->
+        <div class="md:hidden w-full flex items-center gap-3 px-6 py-4 border-b border-white/10 overflow-x-auto">
+            <button type="button" onclick="switchTab('dashboard')" class="admin-tab-btn active px-4 py-2 rounded-lg inline-flex items-center gap-2 whitespace-nowrap text-sm">
+                <i data-lucide="line-chart" class="ico ico-sm"></i> Статистика
+            </button>
+            <button type="button" onclick="switchTab('sessions')" class="admin-tab-btn px-4 py-2 rounded-lg inline-flex items-center gap-2 whitespace-nowrap text-sm">
+                <i data-lucide="radar" class="ico ico-sm"></i> Визиты
+            </button>
+            <button type="button" onclick="switchTab('users')" class="admin-tab-btn px-4 py-2 rounded-lg inline-flex items-center gap-2 whitespace-nowrap text-sm">
+                <i data-lucide="users" class="ico ico-sm"></i> Пользователи
+            </button>
+            <button type="button" onclick="switchTab('orders')" class="admin-tab-btn px-4 py-2 rounded-lg inline-flex items-center gap-2 whitespace-nowrap text-sm">
+                <i data-lucide="package" class="ico ico-sm"></i> Заказы
+            </button>
+            <button type="button" onclick="switchTab('logs')" class="admin-tab-btn px-4 py-2 rounded-lg inline-flex items-center gap-2 whitespace-nowrap text-sm">
+                <i data-lucide="list" class="ico ico-sm"></i> Логи
+            </button>
+            <button type="button" onclick="switchTab('contactsTab')" class="admin-tab-btn px-4 py-2 rounded-lg inline-flex items-center gap-2 whitespace-nowrap text-sm">
+                <i data-lucide="mail" class="ico ico-sm"></i> Почта
+            </button>
+            <button type="button" onclick="switchTab('settings')" class="admin-tab-btn px-4 py-2 rounded-lg inline-flex items-center gap-2 whitespace-nowrap text-sm">
+                <i data-lucide="settings" class="ico ico-sm"></i> Настройки
+            </button>
+        </div>
+
+        <!-- ОСНОВНОЙ КОНТЕНТ -->
+        <main class="flex-1 overflow-y-auto w-full">
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="tab-content p-4 sm:p-6 md:p-8">
+                <div class="mb-8">
+                    <h2 class="heading text-2xl sm:text-3xl md:text-4xl font-bold mb-2 gradient-text">Статистика</h2>
+                    <p class="text-white/70 text-sm sm:text-base">Обзор ключевых показателей системы</p>
+                </div>
+
+                <!-- Основная статистика -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="card-glowing rounded-2xl p-6 border border-white/10">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/60 text-sm mb-2">Пользователей в БД</p>
+                                <p class="text-4xl font-bold text-[#00d4ff]" id="activeUsers">0</p>
+                            </div>
+                            <span class="inline-flex text-[#22d3ee]/20"><i data-lucide="users" class="ico ico-xl"></i></span>
+                        </div>
+                    </div>
+                    <div class="card-glowing rounded-2xl p-6 border border-white/10">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/60 text-sm mb-2">Заявок (заказов) всего</p>
+                                <p class="text-4xl font-bold text-[#ff8c00]" id="totalOrders">0</p>
+                            </div>
+                            <span class="inline-flex text-[#fb923c]/20"><i data-lucide="package" class="ico ico-xl"></i></span>
+                        </div>
+                    </div>
+                    <div class="card-glowing rounded-2xl p-6 border border-white/10">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/60 text-sm mb-2">Новых визитов сегодня</p>
+                                <p class="text-4xl font-bold text-[#00d4ff]" id="todaySessions">0</p>
+                            </div>
+                            <span class="inline-flex text-[#22d3ee]/20"><i data-lucide="radar" class="ico ico-xl"></i></span>
+                        </div>
+                    </div>
+                    <div class="card-glowing rounded-2xl p-6 border border-white/10">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white/60 text-sm mb-2">Сумма заявок сегодня</p>
+                                <p class="text-4xl font-bold text-[#ff8c00]" id="monthlyRevenue">0 ₽</p>
+                            </div>
+                            <span class="inline-flex text-[#fb923c]/20"><i data-lucide="line-chart" class="ico ico-xl"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-glowing rounded-2xl p-6 border border-white/10 mb-8">
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        Данные на этой странице подгружаются из файла <strong>transnafta.db</strong> через API (запустите <code class="text-[#22d3ee]">npm start</code>).
+                        Старый демо-контент и генерация случайных IP удалены — в таблицах только реальные события с сайта.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ВИЗИТЫ И ВХОДЫ В ЛК (данные только из SQLite) -->
+            <div id="sessions" class="tab-content p-4 sm:p-6 md:p-8 hidden">
+                <div class="mb-8">
+                    <h2 class="heading text-2xl sm:text-3xl md:text-4xl font-bold mb-2 gradient-text">Посещения и входы</h2>
+                    <p class="text-white/70 text-sm sm:text-base">«Визиты» — браузерные сессии на сайте. «Входы» — реальная авторизация в личный кабинет.</p>
+                </div>
+
+                <h3 class="text-lg font-semibold text-[#22d3ee] mb-3">Визиты сайта</h3>
+                <div class="card-glowing rounded-2xl border border-white/10 overflow-x-auto mb-10">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Посетитель</th>
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Клиент ЛК</th>
+                                <th class="hidden md:table-cell text-left py-3 px-3 text-white/70 font-semibold">IP</th>
+                                <th class="hidden lg:table-cell text-left py-3 px-3 text-white/70 font-semibold">Страница</th>
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Последнее</th>
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sessionsBrowseBody"></tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-lg font-semibold text-[#fb923c] mb-3">Входы в личный кабинет</h3>
+                <div class="card-glowing rounded-2xl border border-white/10 overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Время</th>
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Email</th>
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">ФИО</th>
+                                <th class="hidden md:table-cell text-left py-3 px-3 text-white/70 font-semibold">IP</th>
+                                <th class="hidden lg:table-cell text-left py-3 px-3 text-white/70 font-semibold">User-Agent</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loginEventsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ПОЛЬЗОВАТЕЛИ -->
+            <div id="users" class="tab-content p-4 sm:p-6 md:p-8 hidden">
+                <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="heading text-2xl sm:text-3xl md:text-4xl font-bold mb-2 gradient-text">Пользователи</h2>
+                        <p class="text-white/70 text-sm sm:text-base">Управление аккаунтами</p>
+                    </div>
+                    <button type="button" onclick="addNewUser()" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] px-4 sm:px-6 py-3 rounded-2xl font-semibold hover:scale-105 transition whitespace-nowrap text-sm sm:text-base">
+                        <i data-lucide="plus" class="ico ico-sm"></i>Добавить
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" id="usersGrid">
+                    <!-- Динамически заполняется -->
+                </div>
+            </div>
+
+            <!-- ЗАКАЗЫ -->
+            <div id="orders" class="tab-content p-8 hidden">
+                <div class="mb-8">
+                    <h2 class="heading text-4xl font-bold mb-2 gradient-text">Заказы</h2>
+                    <p class="text-white/70">Все заказы в системе</p>
+                </div>
+
+                <div class="card-glowing rounded-2xl border border-white/10 overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-3 px-3 sm:px-4 text-white/70 font-semibold">ID</th>
+                                <th class="hidden sm:table-cell text-left py-3 px-4 text-white/70 font-semibold">Клиент</th>
+                                <th class="text-left py-3 px-3 sm:px-4 text-white/70 font-semibold">Маршрут</th>
+                                <th class="text-left py-3 px-3 sm:px-4 text-white/70 font-semibold">Сумма</th>
+                                <th class="text-left py-3 px-3 sm:px-4 text-white/70 font-semibold">Статус</th>
+                                <th class="hidden md:table-cell text-left py-3 px-4 text-white/70 font-semibold">Дата</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTable">
+                            <!-- Динамически заполняется -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ЛОГИ ДЕЙСТВИЙ -->
+            <div id="logs" class="tab-content p-4 sm:p-6 md:p-8 hidden">
+                <div class="mb-8">
+                    <h2 class="heading text-2xl sm:text-3xl md:text-4xl font-bold mb-2 gradient-text">Логи действий</h2>
+                    <p class="text-white/70 text-sm sm:text-base">История всех операций в системе</p>
+                </div>
+
+                <div class="card-glowing rounded-2xl p-4 sm:p-6 border border-white/10">
+                    <div class="space-y-4" id="logsList">
+                        <!-- Динамически заполняется -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ОБРАЩЕНИЯ С САЙТА (контакты) -->
+            <div id="contactsTab" class="tab-content p-4 sm:p-6 md:p-8 hidden">
+                <div class="mb-8">
+                    <h2 class="heading text-2xl sm:text-3xl md:text-4xl font-bold mb-2 gradient-text">Сообщения с формы контактов</h2>
+                    <p class="text-white/70 text-sm sm:text-base">Строки из таблицы contact_messages в transnafta.db</p>
+                </div>
+                <div class="card-glowing rounded-2xl border border-white/10 overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Дата</th>
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Имя</th>
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Email</th>
+                                <th class="hidden sm:table-cell text-left py-3 px-3 text-white/70 font-semibold">Телефон</th>
+                                <th class="text-left py-3 px-3 text-white/70 font-semibold">Сообщение</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contactMessagesBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- НАСТРОЙКИ -->
+            <div id="settings" class="tab-content p-4 sm:p-6 md:p-8 hidden">
+                <div class="mb-8">
+                    <h2 class="heading text-2xl sm:text-3xl md:text-4xl font-bold mb-2 gradient-text">Настройки</h2>
+                    <p class="text-white/70 text-sm sm:text-base">Конфигурация системы</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                    <div class="card-glowing rounded-2xl p-6 border border-white/10">
+                        <h3 class="text-xl font-semibold mb-6 text-[#00d4ff]">Система</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-white/70 mb-2">Название сайта</label>
+                                <input type="text" value="ТрансНафта" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-2 text-white outline-none focus:border-[#00d4ff]">
+                            </div>
+                            <div>
+                                <label class="block text-white/70 mb-2">Email поддержки</label>
+                                <input type="email" value="support@transnafta.ru" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-2 text-white outline-none focus:border-[#00d4ff]">
+                            </div>
+                            <div>
+                                <label class="block text-white/70 mb-2">Телефон</label>
+                                <input type="tel" value="+7 495 123-45-67" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-2 text-white outline-none focus:border-[#00d4ff]">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-glowing rounded-2xl p-6 border border-white/10">
+                        <h3 class="text-xl font-semibold mb-6 text-[#ff8c00]">Безопасность</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-white/70">Двухфакторная аутентификация</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00d4ff]"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-white/70">Логирование действий</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00d4ff]"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-white/70">Уведомления о входе</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00d4ff]"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button type="button" onclick="saveSettings()" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] px-8 py-3 rounded-2xl font-semibold hover:scale-105 transition">
+                        <i data-lucide="save" class="ico ico-sm"></i>Сохранить изменения
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    </div>
+
+    <script>
+        const ADMIN_TOKEN_KEY = 'tn_admin_token';
+
+        function apiRoot() {
+            if (typeof getApiSiteOrigin === 'function') return getApiSiteOrigin();
+            if (window.location.protocol === 'file:') return 'http://localhost:3000';
+            return window.location.origin;
+        }
+
+        async function fetchJson(path) {
+            const token = sessionStorage.getItem(ADMIN_TOKEN_KEY);
+            const headers = {};
+            if (token) headers.Authorization = 'Bearer ' + token;
+
+            const r = await fetch(apiRoot() + path, { headers });
+            const text = await r.text();
+            let data;
+            try {
+                data = text ? JSON.parse(text) : null;
+            } catch (e) {
+                throw new Error(
+                    'Ответ не JSON — проверьте npm start и что админка/API на том же хосте, что в api-base.js (по умолчанию :3000).'
+                );
+            }
+            if (!r.ok) {
+                if (r.status === 401 && token) {
+                    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+                    window.location.reload();
+                }
+                const errText =
+                    (data && (data.message || data.error)) || `${r.status} ${r.statusText}`;
+                throw new Error(errText);
+            }
+            return data;
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach((tab) => tab.classList.add('hidden'));
+            document.querySelectorAll('.sidebar-item').forEach((item) => item.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-btn').forEach((btn) => btn.classList.remove('active'));
+
+            document.getElementById(tabName).classList.remove('hidden');
+
+            document.querySelectorAll('.sidebar-item').forEach((item) => {
+                if (item.getAttribute('href') === '#' + tabName) item.classList.add('active');
+            });
+            document.querySelectorAll('.admin-tab-btn').forEach((btn) => {
+                const oc = btn.getAttribute('onclick') || '';
+                if (oc.includes("'" + tabName + "'") || oc.includes('"' + tabName + '"')) btn.classList.add('active');
+            });
+
+            if (tabName === 'sessions') loadSessions();
+            if (tabName === 'users') loadUsers();
+            if (tabName === 'orders') loadOrders();
+            if (tabName === 'logs') loadLogs();
+            if (tabName === 'contactsTab') loadContacts();
+            if (tabName === 'dashboard') updateDashboard();
+            if (typeof refreshIcons === 'function') refreshIcons();
+        }
+
+        async function submitAdminLogin(ev) {
+            ev.preventDefault();
+            const msg = document.getElementById('adminLoginErr');
+            msg.classList.add('hidden');
+            const username = document.getElementById('adminUser').value.trim();
+            const password = document.getElementById('adminPass').value;
+            try {
+                const r = await fetch(apiRoot() + '/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const text = await r.text();
+                let data = {};
+                try {
+                    data = text ? JSON.parse(text) : {};
+                } catch (_) {}
+                if (!r.ok) throw new Error(data.message || 'Неверный логин или пароль');
+                if (!data.token) throw new Error('Сервер не выдал ключ сессии');
+                sessionStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+                document.getElementById('adminLoginGate').classList.add('hidden');
+                document.getElementById('adminShell').classList.remove('hidden');
+                document.getElementById('adminPass').value = '';
+                await updateDashboard();
+                if (typeof refreshIcons === 'function') refreshIcons();
+            } catch (e) {
+                msg.textContent = String(e.message || e);
+                msg.classList.remove('hidden');
+            }
+        }
+
+        function adminPanelLogout() {
+            sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+            window.location.reload();
+        }
+
+        async function resumeAdminSession() {
+            const token = sessionStorage.getItem(ADMIN_TOKEN_KEY);
+            if (!token) return;
+            try {
+                await fetchJson('/api/admin/overview');
+                document.getElementById('adminLoginGate').classList.add('hidden');
+                document.getElementById('adminShell').classList.remove('hidden');
+                await updateDashboard();
+            } catch {
+                sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+            }
+        }
+
+        async function loadSessions() {
+            const browse = document.getElementById('sessionsBrowseBody');
+            const loginB = document.getElementById('loginEventsBody');
+            try {
+                const [sessions, logins] = await Promise.all([
+                    fetchJson('/api/admin/sessions'),
+                    fetchJson('/api/admin/logins')
+                ]);
+
+                browse.innerHTML = sessions.length
+                    ? sessions.map(s => `
+                    <tr class="border-b border-white/5 hover:bg-white/5">
+                        <td class="py-3 px-3 font-mono text-xs">${String(s.visitor_key || '').slice(0, 16)}…</td>
+                        <td class="py-3 px-3 text-white/80">${s.user_email || '—'}<div class="text-xs text-white/50">${esc(s.user_name || '')}</div></td>
+                        <td class="hidden md:table-cell py-3 px-3 text-white/60">${esc(s.ip || '')}</td>
+                        <td class="hidden lg:table-cell py-3 px-3 text-white/50 text-xs">${esc(s.last_path || '')}</td>
+                        <td class="py-3 px-3 text-white/60 text-xs">${esc(s.last_seen_at || '')}</td>
+                        <td class="py-3 px-3"><span class="user-badge ${s.status === 'active' ? 'status-active' : 'status-inactive'}">${esc(s.status || '')}</span></td>
+                    </tr>`).join('')
+                    : `<tr><td colspan="6" class="py-6 text-center text-white/60">Нет записей о визитах</td></tr>`;
+
+                loginB.innerHTML = logins.length
+                    ? logins.map(l => `
+                    <tr class="border-b border-white/5 hover:bg-white/5">
+                        <td class="py-3 px-3 text-xs text-white/70">${esc(l.created_at || '')}</td>
+                        <td class="py-3 px-3">${esc(l.email)}</td>
+                        <td class="py-3 px-3 text-white/80">${esc(l.full_name || '')}</td>
+                        <td class="hidden md:table-cell py-3 px-3 text-xs text-white/60">${esc(l.ip || '')}</td>
+                        <td class="hidden lg:table-cell py-3 px-3 text-xs text-white/50">${esc(l.user_agent || '')}</td>
+                    </tr>`).join('')
+                    : `<tr><td colspan="5" class="py-6 text-center text-white/60">Пока никто не входил в личный кабинет</td></tr>`;
+            } catch (e) {
+                browse.innerHTML = `<tr><td colspan="6" class="py-6 px-4 text-red-400">Ошибка: ${esc(e.message)}. Запустите сервер npm start.</td></tr>`;
+                loginB.innerHTML = `<tr><td colspan="5" class="py-6 px-4 text-red-400">${esc(e.message)}</td></tr>`;
+            }
+        }
+
+        function esc(v) {
+            return String(v).replace(/[&<>'"]/g, c =>
+                ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' })[c]);
+        }
+
+        async function loadUsers() {
+            const grid = document.getElementById('usersGrid');
+            try {
+                const users = await fetchJson('/api/admin/users');
+                grid.innerHTML = users.length
+                    ? users.map(user => `
+                <div class="card-glowing rounded-2xl p-6 border border-white/10">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-[#00d4ff] to-[#ff8c00] rounded-full flex items-center justify-center text-xl">
+                            ${esc((user.full_name || '?').charAt(0))}
+                        </div>
+                        <span class="user-badge ${user.status === 'active' ? 'status-active' : 'status-inactive'}">
+                            ${user.status === 'active' ? '● Активен' : '● ' + esc(user.status)}
+                        </span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-1">${esc(user.full_name)}</h3>
+                    <p class="text-white/60 text-sm mb-3">${esc(user.email)}</p>
+                    <p class="text-white/50 text-xs">Тел: ${esc(user.phone || '—')} · ID ${user.id}</p>
+                    <p class="text-white/40 text-xs mt-2">Зарегистрирован: ${esc(user.created_at || '')}</p>
+                    <p class="text-white/70 text-xs mt-2 inline-block px-2 py-1 rounded bg-white/10">${esc(user.user_type)}</p>
+                </div>`).join('')
+                    : `<p class="text-white/60 col-span-full">Нет аккаунтов</p>`;
+            } catch (e) {
+                grid.innerHTML = `<p class="text-red-400">${esc(e.message)}</p>`;
+            }
+            if (typeof refreshIcons === 'function') refreshIcons();
+        }
+
+        async function loadOrders() {
+            const table = document.getElementById('ordersTable');
+            const statusColors = {
+                submitted: 'bg-[#3b82f6]/10 text-[#3b82f6]',
+                completed: 'bg-[#22c55e]/10 text-[#22c55e]',
+                cancelled: 'bg-[#ef4444]/10 text-[#ef4444]'
+            };
+
+            try {
+                const orders = await fetchJson('/api/admin/orders');
+                table.innerHTML = orders.length
+                    ? orders.map(o => `
+                    <tr class="border-b border-white/5 hover:bg-white/5">
+                        <td class="py-3 px-4 font-semibold text-[#00d4ff]">${esc(o.order_number)}</td>
+                        <td class="hidden sm:table-cell py-3 px-4">${o.client_email ? esc(o.client_name || '') + '<div class="text-xs">' + esc(o.client_email) + '</div>' : '<span class="text-white/50">Гость</span>'}</td>
+                        <td class="py-3 px-4 text-white/70">${esc(o.from_region)} → ${esc(o.to_region)}</td>
+                        <td class="py-3 px-4 font-semibold">${esc(o.price_text || '')}</td>
+                        <td class="py-3 px-4">
+                            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold ${statusColors[o.status] || 'bg-white/10 text-white'}">
+                                ${esc(o.status)}
+                            </span>
+                        </td>
+                        <td class="hidden md:table-cell py-3 px-4 text-white/70">${esc(o.created_at || '')}</td>
+                    </tr>`).join('')
+                    : '<tr><td colspan="6" class="py-6 text-center text-white/60">Нет заказов в базе</td></tr>';
+            } catch (e) {
+                table.innerHTML = `<tr><td colspan="6" class="py-6 px-4 text-red-400">${esc(e.message)}</td></tr>`;
+            }
+        }
+
+        async function loadLogs() {
+            const list = document.getElementById('logsList');
+            const icons = {
+                login: 'log-in',
+                order_submitted: 'send',
+                contact_form: 'mail',
+                default: 'list'
+            };
+            try {
+                const logs = await fetchJson('/api/admin/activity');
+                if (!logs.length) {
+                    list.innerHTML = '<div class="text-center py-8 text-white/60">Пока нет записей activity_logs</div>';
+                    return;
+                }
+                list.innerHTML = logs.map(log => ({
+                    ic: icons[log.action] || icons.default,
+                    text: `[${esc(log.created_at)}] ${esc(log.action)}${log.entity_type ? ' · ' + esc(log.entity_type) : ''}${log.details_json ? ' — ' + esc(log.details_json.slice(0, 120)) : ''}`
+                })).map(x => `
+                <div class="flex items-start gap-3 pb-3 border-b border-white/10 last:border-0">
+                    <i data-lucide="${x.ic}" class="ico ico-lg text-[#a78bfa] flex-shrink-0"></i>
+                    <p class="text-sm text-white/90 break-all">${x.text}</p>
+                </div>`).join('');
+            } catch (e) {
+                list.innerHTML = `<div class="text-red-400">${esc(e.message)}</div>`;
+            }
+            if (typeof refreshIcons === 'function') refreshIcons();
+        }
+
+        async function loadContacts() {
+            const body = document.getElementById('contactMessagesBody');
+            try {
+                const rows = await fetchJson('/api/admin/contacts');
+                body.innerHTML = rows.length
+                    ? rows.map(m => `
+                    <tr class="border-b border-white/5">
+                        <td class="py-3 px-3 text-xs">${esc(m.created_at || '')}</td>
+                        <td class="py-3 px-3">${esc(m.name || '—')}</td>
+                        <td class="py-3 px-3">${esc(m.email)}</td>
+                        <td class="hidden sm:table-cell py-3 px-3">${esc(m.phone || '—')}</td>
+                        <td class="py-3 px-3 text-white/70 max-w-xs">${esc(m.message)}</td>
+                    </tr>`).join('')
+                    : '<tr><td colspan="5" class="py-6 text-center text-white/60">Сообщений пока нет</td></tr>';
+            } catch (e) {
+                body.innerHTML = `<tr><td colspan="5" class="text-red-400 p-4">${esc(e.message)}</td></tr>`;
+            }
+        }
+
+        async function updateDashboard() {
+            try {
+                const o = await fetchJson('/api/admin/overview');
+                document.getElementById('activeUsers').textContent = o.usersTotal ?? 0;
+                document.getElementById('totalOrders').textContent = o.ordersTotal ?? 0;
+                document.getElementById('todaySessions').textContent = o.sessionsStartedToday ?? 0;
+                const rev = Number(o.revenueToday || 0);
+                document.getElementById('monthlyRevenue').textContent = '₽' + rev.toLocaleString('ru-RU');
+            } catch {
+                document.getElementById('activeUsers').textContent = '—';
+                document.getElementById('totalOrders').textContent = '—';
+                document.getElementById('todaySessions').textContent = '—';
+                document.getElementById('monthlyRevenue').textContent = '?';
+            }
+        }
+
+        function addNewUser() {
+            alert('Создавайте пользователей через форму регистрации на сайте (cabinet.html) — данные сразу попадут в таблицу users.');
+        }
+
+        function saveSettings() {
+            alert('Параметры из этого блока можно позже сохранять в базу или конфиг отдельно. Сейчас админ-панель читает только реальную SQLite.');
+        }
+
+        window.addEventListener('load', async function () {
+            await resumeAdminSession();
+            if (typeof refreshIcons === 'function') refreshIcons();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+    <nav class="tn-nav">
+        <header class="tn-nav-inner">
+            <a href="index.html" class="tn-logo">
+                <span class="tn-logo-mark">🚛</span>
+                <span class="tn-logo-text">ТрансНафта<span>логистика по России</span></span>
+            </a>
+            <ul class="hidden md:flex items-center gap-8" style="list-style:none;margin:0;padding:0">
+                <li><a href="index.html" class="nav-link">Главная</a></li>
+                <li><a href="services.html" class="nav-link">Услуги</a></li>
+                <li><a href="calculator.html" class="nav-link">Калькулятор</a></li>
+                <li><a href="about.html" class="nav-link">О компании</a></li>
+                <li><a href="contacts.html" class="nav-link">Контакты</a></li>
+            </ul>
+            <ul class="tn-nav-actions" style="list-style:none;margin:0;padding:0">
+                <li><a href="admin.html" class="tn-icon-btn" title="Админ панель"><i data-lucide="shield-check" class="ico ico-nav"></i></a></li>
+                <li><a href="cabinet.html" class="tn-icon-btn hidden sm:flex"><i data-lucide="user-circle" class="ico ico-nav"></i><span class="hidden sm:inline">Кабинет</span></a></li>
+                <li><a href="cart.html" class="tn-cart-btn"><i data-lucide="shopping-bag" class="ico ico-nav"></i><span class="hidden sm:inline">Корзина</span><span id="cartCount">0</span></a></li>
+                <li><button id="mobileMenuBtn" type="button" class="md:hidden"><i data-lucide="menu" class="ico ico-nav"></i></button></li>
+            </ul>
+        </header>
+        <aside id="mobileMenu" class="hidden md:hidden">
+            <nav class="tn-container py-4 flex flex-col gap-1">
+                <a href="index.html">Главная</a>
+                <a href="services.html">Услуги</a>
+                <a href="calculator.html">Калькулятор</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+                <hr class="border-white/10 my-2">
+                <a href="cabinet.html"><i data-lucide="user-circle" class="ico ico-sm inline align-middle mr-2"></i>Личный кабинет</a>
+            </nav>
+        </aside>
+    </nav>

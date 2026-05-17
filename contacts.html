@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты — ТрансНафта</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="theme.css">
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <script src="api-base.js"></script>
+    <script src="icons-init.js" defer></script>
+    <script src="tracker.js"></script>
+    <script src="auth.js"></script>
+    <script src="mobile-menu.js"></script>
+</head>
+<body>
+    <nav class="tn-nav">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                <div class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></div>
+                <div>
+                    <div class="heading text-2xl sm:text-3xl font-bold tracking-tight">ТрансНафта</div>
+                    <span class="block text-[0.62rem] font-semibold text-[color:var(--muted)] uppercase tracking-[0.2em]">логистика</span>
+                </div>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="services.html" class="nav-link">Услуги</a>
+                <a href="calculator.html" class="nav-link">Калькулятор</a>
+                <a href="about.html" class="nav-link">О компании</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="admin.html" class="tn-icon-btn" title="Админ панель"><i data-lucide="shield-check" class="ico ico-nav"></i></a>
+                <a href="cabinet.html" class="hidden sm:flex tn-icon-btn"><i data-lucide="user-circle" class="ico ico-nav"></i><span class="hidden sm:inline font-semibold text-sm">Кабинет</span></a>
+                <a href="cart.html" class="tn-cart-btn">
+                    <i data-lucide="shopping-bag" class="ico ico-nav"></i>
+                    <span class="hidden sm:inline">Корзина</span>
+                    <span id="cartCount">0</span>
+                </a>
+                <button type="button" id="mobileMenuBtn" class="md:hidden"><i data-lucide="menu" class="ico ico-nav"></i></button>
+            </div>
+        </div>
+        
+        <div id="mobileMenu" class="hidden md:hidden">
+            <nav class="tn-container py-4 flex flex-col gap-1">
+                <a href="index.html">Главная</a>
+                <a href="services.html">Услуги</a>
+                <a href="calculator.html">Калькулятор</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+                <hr class="border-white/10 my-2 opacity-40">
+                <a href="cabinet.html"><i data-lucide="user-circle" class="ico ico-sm inline align-middle mr-2"></i>Личный кабинет</a>
+            </nav>
+        </div>
+    </nav>
+
+    <section class="tn-page-hero py-24">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h1 class="heading text-5xl font-bold mb-4 gradient-text">Свяжитесь с нами</h1>
+            <p class="text-xl text-white/80 mb-10">Оставьте заявку, и мы подготовим персональное решение для вашей логистики.</p>
+        </div>
+    </section>
+
+    <section class="py-20 tn-band">
+        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12">
+            <div class="space-y-8">
+                <div class="card-glowing border border-white/10 rounded-3xl p-10">
+                    <h2 class="text-3xl font-semibold mb-5 text-[#00d4ff]">Контактная информация</h2>
+                    <p class="text-white/70 mb-4">Ответим на все вопросы по организации перевозки, расчетам и условиям обслуживания.</p>
+                    <div class="space-y-4 text-white/80">
+                        <div class="flex items-center gap-3"><span class="text-[#22d3ee] shrink-0"><i data-lucide="phone" class="ico ico-lg"></i></span><span>8 922 831-00-97</span></div>
+                        <div class="flex items-center gap-3"><span class="text-[#fb923c] shrink-0"><i data-lucide="mail" class="ico ico-lg"></i></span><span>info@transnafta.ru</span></div>
+                        <div class="flex items-center gap-3"><span class="text-[#a78bfa] shrink-0"><i data-lucide="map-pin" class="ico ico-lg"></i></span><span>Самара, ул. Никитинская, д. 30, 2 этаж</span></div>
+                        <div class="flex items-center gap-3"><span class="text-[#22d3ee] shrink-0"><i data-lucide="clock" class="ico ico-lg"></i></span><span>Пн-Пт: 8:00-20:00, Сб-Вс: 9:00-18:00</span></div>
+                    </div>
+                </div>
+                <div class="bg-[url('https://images.unsplash.com/photo-1774929105832-81897225bda5?fm=jpg&q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center rounded-3xl h-96 shadow-2xl border border-white/10"></div>
+            </div>
+            <div class="card-glowing border border-white/10 rounded-3xl p-10">
+                <h2 class="text-3xl font-semibold mb-6 text-[#ff8c00]">Напишите нам</h2>
+                <form id="contactForm" class="space-y-6" onsubmit="return submitContact(event)">
+                    <div>
+                        <input type="text" id="contactName" name="name" placeholder="Ваше имя" class="w-full bg-transparent border border-white/10 rounded-3xl px-6 py-5 text-white outline-none focus:border-[#00d4ff] transition">
+                    </div>
+                    <div>
+                        <input type="email" id="contactEmail" name="email" required placeholder="Email" class="w-full bg-transparent border border-white/10 rounded-3xl px-6 py-5 text-white outline-none focus:border-[#00d4ff] transition">
+                    </div>
+                    <div>
+                        <input type="tel" id="contactPhone" name="phone" placeholder="Телефон" class="w-full bg-transparent border border-white/10 rounded-3xl px-6 py-5 text-white outline-none focus:border-[#00d4ff] transition">
+                    </div>
+                    <div>
+                        <textarea id="contactMessage" name="message" rows="6" required placeholder="Сообщение" class="w-full bg-transparent border border-white/10 rounded-3xl px-6 py-5 text-white outline-none focus:border-[#00d4ff] transition"></textarea>
+                    </div>
+                    <button type="submit" id="contactSubmitBtn" class="w-full bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] py-5 rounded-3xl text-lg font-semibold hover:scale-105 transition">
+                        Отправить сообщение
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="site-footer-deck">
+            <section class="site-footer-inner">
+                <article class="site-footer-brand">
+                    <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                        <span class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></span>
+                        <span class="tn-logo-text">ТрансНафта<span>логистика по России</span></span>
+                    </a>
+                    <p class="tn-footer-tagline">Надёжные грузоперевозки по всей России. Расчёт, оформление и контроль доставки в одном контуре.</p>
+                    <div class="tn-footer-meta">
+                        <span class="site-footer-chip">24/7 диспетчер</span>
+                        <span class="site-footer-chip site-footer-chip--warm">с 2009 года</span>
+                    </div>
+                </article>
+                <article>
+                    <h4>Навигация</h4>
+                    <a href="services.html">Услуги</a>
+                    <a href="calculator.html">Калькулятор</a>
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                </article>
+                <article>
+                    <h4>Клиентам</h4>
+                    <a href="cabinet.html">Личный кабинет</a>
+                    <a href="cart.html">Корзина</a>
+                    <a href="calculator.html">Рассчитать доставку</a>
+                </article>
+                <div class="site-footer-route" aria-hidden="true">
+                    <span>Терминал</span>
+                    <span class="site-footer-route-line"></span>
+                    <span>Маршрут · RU</span>
+                </div>
+            </section>
+            <div class="site-footer-bottom">
+                <p>© 2026 ТрансНафта. Все права защищены.</p>
+                <span class="site-footer-slot">TN-FTR-2026 · ISO-DOCK</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function parseJsonResponse(r, rawText) {
+            try {
+                return JSON.parse(rawText);
+            } catch (ex) {
+                if (rawText.trim().startsWith('<!DOCTYPE') || rawText.trim().startsWith('<html')) {
+                    throw new Error(
+                        'Пришла HTML-страница вместо ответа API. Откройте сайт через http://localhost:3000/ или задайте meta tn-api-origin (см. api-base.js).'
+                    );
+                }
+                throw new Error(rawText.slice(0, 120) || ex.message);
+            }
+        }
+
+        async function submitContact(ev) {
+            ev.preventDefault();
+            const btn = document.getElementById('contactSubmitBtn');
+            btn.disabled = true;
+            const body = {
+                name: document.getElementById('contactName').value.trim(),
+                email: document.getElementById('contactEmail').value.trim(),
+                phone: document.getElementById('contactPhone').value.trim(),
+                message: document.getElementById('contactMessage').value.trim(),
+                session_token: localStorage.getItem('current_session_id')
+            };
+            try {
+                const api = typeof getApiSiteOrigin === 'function' ? getApiSiteOrigin() : window.location.origin;
+                const r = await fetch(api + '/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const txt = await r.text();
+                const j = parseJsonResponse(r, txt);
+                if (!r.ok) throw new Error(j.message || 'Ошибка');
+                alert('Сообщение сохранено. Мы свяжемся с вами в ближайшее время.');
+                document.getElementById('contactForm').reset();
+            } catch (e) {
+                alert('Не удалось отправить. Запустите сервер (npm start) и откройте сайт по http://localhost:3000\n' + e.message);
+            } finally {
+                btn.disabled = false;
+            }
+            return false;
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('transnafta_cart')) || [];
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+        window.onload = () => {
+            updateCartCount();
+            if (typeof refreshIcons === 'function') refreshIcons();
+        };
+    </script>
+</body>
+</html>

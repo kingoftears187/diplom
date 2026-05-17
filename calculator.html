@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор стоимости — ТрансНафта</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="theme.css">
+    <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+    <script src="api-base.js"></script>
+    <script src="icons-init.js" defer></script>
+    <script src="tracker.js"></script>
+    <script src="auth.js"></script>
+    <script src="mobile-menu.js"></script>
+</head>
+<body>
+    <nav class="tn-nav">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                <div class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></div>
+                <div>
+                    <div class="heading text-2xl sm:text-3xl font-bold tracking-tight">ТрансНафта</div>
+                    <span class="block text-[0.62rem] font-semibold text-[color:var(--muted)] uppercase tracking-[0.2em]">логистика</span>
+                </div>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="services.html" class="nav-link">Услуги</a>
+                <a href="calculator.html" class="nav-link">Калькулятор</a>
+                <a href="about.html" class="nav-link">О компании</a>
+                <a href="contacts.html" class="nav-link">Контакты</a>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="admin.html" class="tn-icon-btn" title="Админ панель"><i data-lucide="shield-check" class="ico ico-nav"></i></a>
+                <a href="cabinet.html" class="hidden sm:flex tn-icon-btn"><i data-lucide="user-circle" class="ico ico-nav"></i><span class="hidden sm:inline font-semibold text-sm">Кабинет</span></a>
+                <a href="cart.html" class="tn-cart-btn">
+                    <i data-lucide="shopping-bag" class="ico ico-nav"></i>
+                    <span class="hidden sm:inline">Корзина</span>
+                    <span id="cartCount">0</span>
+                </a>
+                <button type="button" id="mobileMenuBtn" class="md:hidden"><i data-lucide="menu" class="ico ico-nav"></i></button>
+            </div>
+        </div>
+        
+        <div id="mobileMenu" class="hidden md:hidden">
+            <nav class="tn-container py-4 flex flex-col gap-1">
+                <a href="index.html">Главная</a>
+                <a href="services.html">Услуги</a>
+                <a href="calculator.html">Калькулятор</a>
+                <a href="about.html">О компании</a>
+                <a href="contacts.html">Контакты</a>
+                <hr class="border-white/10 my-2 opacity-40">
+                <a href="cabinet.html"><i data-lucide="user-circle" class="ico ico-sm inline align-middle mr-2"></i>Личный кабинет</a>
+            </nav>
+        </div>
+    </nav>
+
+    <section class="tn-page-hero py-12 sm:py-16 md:py-24">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+            <h1 class="heading text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 gradient-text">Калькулятор стоимости</h1>
+            <p class="text-base sm:text-lg md:text-xl text-white/80 mb-6 sm:mb-8 md:mb-10">Введите параметры груза и получите ориентировочную стоимость за секунды.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div class="card-glowing card-glowing--dropdown-safe border border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 space-y-4 sm:space-y-6">
+                    <div class="tn-select-field">
+                        <label for="fromCityTrigger" class="block mb-2 text-sm text-white/70">Город отправления</label>
+                        <div class="tn-fancy-select" data-fancy-root>
+                            <button
+                                type="button"
+                                id="fromCityTrigger"
+                                class="tn-fancy-select__trigger px-4 sm:px-6 py-3 sm:py-5 text-sm sm:text-base"
+                                aria-haspopup="listbox"
+                                aria-expanded="false"
+                                aria-controls="fromCityList">
+                                <span class="tn-fancy-select__value">Москва</span>
+                                <span class="tn-fancy-select__chev-wrap" aria-hidden="true">
+                                    <i data-lucide="chevron-down" class="ico ico-sm"></i>
+                                </span>
+                            </button>
+                            <ul id="fromCityList" class="tn-fancy-select__dropdown" role="listbox" hidden></ul>
+                            <select id="fromCity" class="sr-only" tabindex="-1" aria-hidden="true">
+                            <option value="Москва">Москва</option>
+                            <option value="Санкт-Петербург">Санкт-Петербург</option>
+                            <option value="Екатеринбург">Екатеринбург</option>
+                            <option value="Новосибирск">Новосибирск</option>
+                            <option value="Краснодар">Краснодар</option>
+                            <option value="Владивосток">Владивосток</option>
+                            <option value="Казань">Казань</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tn-select-field">
+                        <label for="toCityTrigger" class="block mb-2 text-sm text-white/70">Город назначения</label>
+                        <div class="tn-fancy-select" data-fancy-root>
+                            <button
+                                type="button"
+                                id="toCityTrigger"
+                                class="tn-fancy-select__trigger px-4 sm:px-6 py-3 sm:py-5 text-sm sm:text-base"
+                                aria-haspopup="listbox"
+                                aria-expanded="false"
+                                aria-controls="toCityList">
+                                <span class="tn-fancy-select__value">Санкт-Петербург</span>
+                                <span class="tn-fancy-select__chev-wrap" aria-hidden="true">
+                                    <i data-lucide="chevron-down" class="ico ico-sm"></i>
+                                </span>
+                            </button>
+                            <ul id="toCityList" class="tn-fancy-select__dropdown" role="listbox" hidden></ul>
+                            <select id="toCity" class="sr-only" tabindex="-1" aria-hidden="true">
+                            <option value="Санкт-Петербург">Санкт-Петербург</option>
+                            <option value="Москва">Москва</option>
+                            <option value="Екатеринбург">Екатеринбург</option>
+                            <option value="Новосибирск">Новосибирск</option>
+                            <option value="Краснодар">Краснодар</option>
+                            <option value="Владивосток">Владивосток</option>
+                            <option value="Казань">Казань</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 sm:gap-6">
+                        <div>
+                            <label class="block mb-2 text-sm text-white/70">Вес груза, тонн</label>
+                            <input type="number" id="weight" value="10" min="1" class="calculator-input w-full border border-white/10 rounded-2xl px-3 sm:px-4 py-2 sm:py-3 text-white outline-none focus:border-[#00d4ff] transition text-sm">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm text-white/70">Объём, м³</label>
+                            <input type="number" id="volume" value="40" min="1" class="calculator-input w-full border border-white/10 rounded-2xl px-3 sm:px-4 py-2 sm:py-3 text-white outline-none focus:border-[#00d4ff] transition text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-sm text-white/70">Тип груза</label>
+                        <div class="flex flex-wrap gap-2 sm:gap-3">
+                            <button type="button" onclick="selectCargoType(this)" data-type="general" class="cargo-btn active border border-white/20 bg-[#00d4ff]/10 px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-2xl text-white flex items-center gap-2 transition text-sm sm:text-base"> Общий</button>
+                            <button type="button" onclick="selectCargoType(this)" data-type="danger" class="cargo-btn border border-white/20 px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-2xl text-white flex items-center gap-2 transition text-sm sm:text-base"> Опасный</button>
+                            <button type="button" onclick="selectCargoType(this)" data-type="refrigerated" class="cargo-btn border border-white/20 px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-2xl text-white flex items-center gap-2 transition text-sm sm:text-base"> Холод</button>
+                            <button type="button" onclick="selectCargoType(this)" data-type="oversize" class="cargo-btn border border-white/20 px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-2xl text-white flex items-center gap-2 transition text-sm sm:text-base"> Негабарит</button>
+                        </div>
+                    </div>
+                    <button onclick="calculateAndAddToCart()" class="w-full bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] py-3 sm:py-4 md:py-5 rounded-2xl md:rounded-3xl font-semibold hover:scale-105 transition text-sm sm:text-base md:text-lg">Рассчитать</button>
+                </div>
+                <div class="card-glowing rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-10 border border-white/10">
+                    <div class="text-xs sm:text-sm text-white/60 mb-3">Ориентировочная стоимость</div>
+                    <div id="resultPrice" class="text-3xl sm:text-4xl md:text-5xl font-bold heading text-[#00d4ff] mb-4">0 ₽</div>
+                    <div id="resultTime" class="text-white/70 mb-6 sm:mb-8 text-sm sm:text-base">Срок доставки: 24 дня</div>
+                    <div id="resultDetails" class="space-y-2 sm:space-y-3 text-white/70 text-sm"></div>
+                    <div class="mt-6 sm:mt-8 md:mt-10 text-white/50 text-xs sm:text-sm">* Итоговая цена уточняется менеджером после подтверждения заявки.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 tn-band">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-center">
+            <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                <div class="text-[#00d4ff] mb-3 flex justify-center"><i data-lucide="calculator" class="ico-xl"></i></div>
+                <h3 class="text-2xl font-semibold mb-3 text-[#00d4ff]">Быстрый расчёт</h3>
+                <p class="text-white/70">Смоделируйте перевозку и сразу получите ориентир стоимости.</p>
+            </div>
+            <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                <div class="text-[#ff8c00] mb-3 flex justify-center"><i data-lucide="sliders-horizontal" class="ico-xl"></i></div>
+                <h3 class="text-2xl font-semibold mb-3 text-[#ff8c00]">Гибкие условия</h3>
+                <p class="text-white/70">Меняем маршрут и технику в зависимости от типа груза и срока.</p>
+            </div>
+            <div class="card-glowing rounded-3xl p-8 border border-white/10">
+                <div class="text-[#00d4ff] mb-3 flex justify-center"><i data-lucide="headset" class="ico-xl"></i></div>
+                <h3 class="text-2xl font-semibold mb-3 text-[#00d4ff]">Поддержка 24/7</h3>
+                <p class="text-white/70">Менеджер на связи и контроль груза на каждом этапе.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="site-footer-deck">
+            <section class="site-footer-inner">
+                <article class="site-footer-brand">
+                    <a href="index.html" class="tn-brand-link flex items-center gap-3">
+                        <span class="tn-logo-mark" aria-hidden="true"><i data-lucide="truck" class="ico ico-lg"></i></span>
+                        <span class="tn-logo-text">ТрансНафта<span>логистика по России</span></span>
+                    </a>
+                    <p class="tn-footer-tagline">Надёжные грузоперевозки по всей России. Расчёт, оформление и контроль доставки в одном контуре.</p>
+                    <div class="tn-footer-meta">
+                        <span class="site-footer-chip">24/7 диспетчер</span>
+                        <span class="site-footer-chip site-footer-chip--warm">с 2009 года</span>
+                    </div>
+                </article>
+                <article>
+                    <h4>Навигация</h4>
+                    <a href="services.html">Услуги</a>
+                    <a href="calculator.html">Калькулятор</a>
+                    <a href="about.html">О компании</a>
+                    <a href="contacts.html">Контакты</a>
+                </article>
+                <article>
+                    <h4>Клиентам</h4>
+                    <a href="cabinet.html">Личный кабинет</a>
+                    <a href="cart.html">Корзина</a>
+                    <a href="calculator.html">Рассчитать доставку</a>
+                </article>
+                <div class="site-footer-route" aria-hidden="true">
+                    <span>Терминал</span>
+                    <span class="site-footer-route-line"></span>
+                    <span>Маршрут · RU</span>
+                </div>
+            </section>
+            <div class="site-footer-bottom">
+                <p>© 2026 ТрансНафта. Все права защищены.</p>
+                <span class="site-footer-slot">TN-FTR-2026 · ISO-DOCK</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const distances = {
+            "Москва": {"Санкт-Петербург":700, "Екатеринбург":1800, "Новосибирск":3300, "Краснодар":1500, "Владивосток":9300, "Казань":800},
+            "Санкт-Петербург": {"Москва":700, "Екатеринбург":2200, "Новосибирск":3800, "Краснодар":2000, "Владивосток":9800, "Казань":1500},
+            "Екатеринбург": {"Москва":1800, "Санкт-Петербург":2200, "Новосибирск":1700, "Краснодар":2600, "Владивосток":7500, "Казань":1100},
+            "Новосибирск": {"Москва":3300, "Санкт-Петербург":3800, "Екатеринбург":1700, "Краснодар":4200, "Владивосток":6000, "Казань":2800},
+            "Краснодар": {"Москва":1500, "Санкт-Петербург":2000, "Екатеринбург":2600, "Новосибирск":4200, "Владивосток":10800, "Казань":1700},
+            "Владивосток": {"Москва":9300, "Санкт-Петербург":9800, "Екатеринбург":7500, "Новосибирск":6000, "Краснодар":10800, "Казань":8500},
+            "Казань": {"Москва":800, "Санкт-Петербург":1500, "Екатеринбург":1100, "Новосибирск":2800, "Краснодар":1700, "Владивосток":8500}
+        };
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('transnafta_cart')) || [];
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        function selectCargoType(button) {
+            document.querySelectorAll('.cargo-btn').forEach(el => el.classList.remove('active', 'border-[#00d4ff]', 'bg-[#00d4ff]/10'));
+            button.classList.add('active', 'border-[#00d4ff]', 'bg-[#00d4ff]/10');
+        }
+
+        function calculateAndAddToCart() {
+            const from = document.getElementById('fromCity').value;
+            const to = document.getElementById('toCity').value;
+            const weight = parseFloat(document.getElementById('weight').value) || 1;
+            const volume = parseFloat(document.getElementById('volume').value) || 1;
+            const cargoType = document.querySelector('.cargo-btn.active')?.dataset.type || 'general';
+
+            const distance = distances[from]?.[to] || 1500;
+            let total = Math.round(distance * 45 + weight * 4500 + volume * 1200);
+            if (cargoType === 'danger') total = Math.round(total * 1.35);
+            if (cargoType === 'refrigerated') total = Math.round(total * 1.25);
+            if (cargoType === 'oversize') total = Math.round(total * 1.6);
+
+            const priceText = total.toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('resultPrice').textContent = priceText;
+            const daysLo = Math.max(1, Math.round(distance / 800));
+            const daysHi = daysLo + 2;
+            document.getElementById('resultTime').textContent = `Срок доставки: ${daysLo}–${daysHi} дн.`;
+            document.getElementById('resultDetails').innerHTML = `
+                <div class="flex justify-between"><span>Расстояние</span><span>${distance} км</span></div>
+                <div class="flex justify-between"><span>Вес</span><span>${weight} т</span></div>
+                <div class="flex justify-between"><span>Объём</span><span>${volume} м</span></div>
+                <div class="flex justify-between text-[#ff8c00]"><span>Тип груза</span><span>${cargoType}</span></div>
+            `;
+
+            const orderData = { from, to, weight, volume, cargoType, price: priceText };
+            if (window.OrderTracker && OrderTracker.notifyCartAdd) {
+                OrderTracker.notifyCartAdd(orderData);
+            }
+
+            const result = {
+                from,
+                to,
+                weight,
+                volume,
+                cargoType,
+                price: priceText,
+                priceAmount: total,
+                date: new Date().toLocaleDateString('ru-RU')
+            };
+            const cart = JSON.parse(localStorage.getItem('transnafta_cart')) || [];
+            cart.push(result);
+            localStorage.setItem('transnafta_cart', JSON.stringify(cart));
+            updateCartCount();
+
+            alert(` Расчёт добавлен в корзину!\n${from}  ${to}\nСтоимость: ${priceText}`);
+        }
+
+        function wireFancySelects() {
+            const roots = [...document.querySelectorAll('.tn-fancy-select[data-fancy-root]')];
+            let reposition = null;
+
+            function placeDropdown(btn, list) {
+                const rect = btn.getBoundingClientRect();
+                const gap = 8;
+                list.style.position = 'fixed';
+                list.style.left = Math.round(rect.left) + 'px';
+                list.style.top = Math.round(rect.bottom + gap) + 'px';
+                list.style.width = Math.round(rect.width) + 'px';
+                list.style.right = 'auto';
+                list.style.zIndex = '10050';
+            }
+
+            function clearDropdownStyles(list) {
+                list.classList.remove('is-mounted');
+                list.style.position = '';
+                list.style.left = '';
+                list.style.top = '';
+                list.style.width = '';
+                list.style.right = '';
+                list.style.zIndex = '';
+            }
+
+            function stopReposition() {
+                if (!reposition) return;
+                window.removeEventListener('scroll', reposition, true);
+                window.removeEventListener('resize', reposition);
+                reposition = null;
+            }
+
+            function closeAll() {
+                stopReposition();
+                roots.forEach((root) => {
+                    root.classList.remove('is-open');
+                    const list = root.querySelector('.tn-fancy-select__dropdown');
+                    const b = root.querySelector('.tn-fancy-select__trigger');
+                    const wrap = root.closest('.tn-select-field');
+                    if (list) {
+                        list.hidden = true;
+                        clearDropdownStyles(list);
+                    }
+                    if (b) b.setAttribute('aria-expanded', 'false');
+                    if (wrap) wrap.classList.remove('is-dropdown-open');
+                });
+            }
+
+            roots.forEach((root) => {
+                const select = root.querySelector('select');
+                const btn = root.querySelector('.tn-fancy-select__trigger');
+                const list = root.querySelector('.tn-fancy-select__dropdown');
+                const valueEl = btn && btn.querySelector('.tn-fancy-select__value');
+                if (!select || !btn || !list || !valueEl) return;
+
+                root.addEventListener('click', (ev) => ev.stopPropagation());
+
+                function syncActive() {
+                    list.querySelectorAll('.tn-fancy-select__option').forEach((li) => {
+                        li.classList.toggle('is-active', li.dataset.value === select.value);
+                    });
+                }
+
+                function renderOptions() {
+                    list.innerHTML = '';
+                    [...select.options].forEach((opt) => {
+                        const li = document.createElement('li');
+                        li.className = 'tn-fancy-select__option';
+                        li.setAttribute('role', 'option');
+                        li.dataset.value = opt.value;
+                        li.textContent = opt.textContent;
+                        if (opt.selected) li.classList.add('is-active');
+                        li.addEventListener('mousedown', (ev) => ev.preventDefault());
+                        li.addEventListener('click', (ev) => {
+                            ev.stopPropagation();
+                            select.value = opt.value;
+                            valueEl.textContent = opt.textContent;
+                            syncActive();
+                            closeAll();
+                            select.dispatchEvent(new Event('change', { bubbles: true }));
+                        });
+                        list.appendChild(li);
+                    });
+                }
+
+                function openDropdown() {
+                    renderOptions();
+                    root.classList.add('is-open');
+                    list.hidden = false;
+                    list.classList.add('is-mounted');
+                    btn.setAttribute('aria-expanded', 'true');
+                    const wrap = root.closest('.tn-select-field');
+                    if (wrap) wrap.classList.add('is-dropdown-open');
+                    placeDropdown(btn, list);
+                    stopReposition();
+                    reposition = () => placeDropdown(btn, list);
+                    window.addEventListener('scroll', reposition, true);
+                    window.addEventListener('resize', reposition);
+                }
+
+                btn.addEventListener('click', (ev) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    const wasOpen = root.classList.contains('is-open');
+                    closeAll();
+                    if (!wasOpen) openDropdown();
+                });
+
+                btn.addEventListener('keydown', (ev) => {
+                    if (ev.key === 'Escape') closeAll();
+                });
+
+                const initial = select.options[select.selectedIndex];
+                if (initial) valueEl.textContent = initial.textContent;
+            });
+
+            document.addEventListener('click', () => closeAll());
+            document.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Escape') closeAll();
+            });
+        }
+
+        window.onload = () => {
+            wireFancySelects();
+            updateCartCount();
+            if (typeof refreshIcons === 'function') refreshIcons();
+        };
+    </script>
+</body>
+</html>
