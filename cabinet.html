@@ -56,14 +56,15 @@
         </div>
     </nav>
 
-    <div class="min-h-screen py-20">
+    <div class="min-h-screen py-20 atlas-cabinet-page">
         <div class="max-w-7xl mx-auto px-6">
             <!-- ЗАГОЛОВОК -->
-            <div id="notLoggedIn" class="text-center">
-                <h1 class="heading text-5xl font-bold mb-6 gradient-text">Личный кабинет</h1>
+            <div id="notLoggedIn" class="text-center atlas-auth-landing">
+                <p class="hero-badge inline-flex"><i data-lucide="key-round" class="ico ico-sm"></i> Доступ клиента</p>
+                <h1 class="heading text-5xl font-bold mb-6">Личный кабинет</h1>
                 <p class="text-xl text-white/70 mb-12">Пожалуйста, войдите или зарегистрируйтесь</p>
 
-                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto atlas-auth-grid">
                     <!-- ФОРМА ВХОДА -->
                     <div class="card-glowing rounded-3xl p-8 border border-white/10">
                         <h2 class="text-3xl font-bold text-[#00d4ff] mb-6">Вход</h2>
@@ -76,7 +77,7 @@
                                 <label class="block text-white/70 mb-2">Пароль</label>
                                 <input type="password" id="loginPassword" placeholder="••••••••" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]" required>
                             </div>
-                            <button type="submit" class="w-full bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] py-3 rounded-lg font-semibold hover:scale-105 transition">
+                            <button type="submit" class="w-full bg-[#1f7a8c] text-[#eef4ff] py-3 rounded-lg font-semibold hover:bg-[#2a8fa2] transition border border-white/20">
                                 Войти
                             </button>
                         </form>
@@ -103,7 +104,7 @@
                                 <label class="block text-white/70 mb-2">Телефон</label>
                                 <input type="tel" id="registerPhone" placeholder="+7 (999) 123-45-67" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]">
                             </div>
-                            <button type="submit" class="w-full bg-gradient-to-r from-[#ff8c00] to-[#00d4ff] text-[#001f3f] py-3 rounded-lg font-semibold hover:scale-105 transition">
+                            <button type="submit" class="w-full bg-[#43556a] text-[#eef4ff] py-3 rounded-lg font-semibold hover:bg-[#556981] transition border border-white/20">
                                 Зарегистрироваться
                             </button>
                         </form>
@@ -113,10 +114,10 @@
             </div>
 
             <!-- ЛИЧНЫЙ КАБИНЕТ (показывается после входа) -->
-            <div id="loggedInContent" class="hidden">
-                <div class="flex items-center justify-between mb-8">
+            <div id="loggedInContent" class="hidden atlas-cabinet-shell">
+                <div class="flex items-center justify-between mb-8 atlas-cabinet-header">
                     <div class="flex items-center gap-6">
-                        <div id="userAvatar" class="w-20 h-20 bg-gradient-to-br from-[#00d4ff] to-[#ff8c00] rounded-full flex items-center justify-center text-4xl font-bold"></div>
+                        <div id="userAvatar" class="w-20 h-20 bg-[#2f3d4f] rounded-full flex items-center justify-center text-4xl font-bold border border-white/20"></div>
                         <div>
                             <h1 id="userName" class="heading text-4xl font-bold gradient-text"></h1>
                             <p id="userEmail" class="text-white/70"></p>
@@ -129,7 +130,7 @@
                 </div>
 
                 <!-- ВКЛАДКИ -->
-                <div class="flex flex-wrap gap-4 mb-8 border-b border-white/10">
+                <div class="flex flex-wrap gap-4 mb-8 border-b border-white/10 atlas-tabs">
                     <button type="button" onclick="switchCabinetTab('orders', event)" class="tab-btn active px-6 py-3 font-semibold inline-flex items-center gap-2">
                         <i data-lucide="package" class="ico ico-sm"></i>Мои заказы
                     </button>
@@ -187,7 +188,7 @@
                                     <input type="text" id="profileKpp" placeholder="9 цифр" class="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00d4ff]">
                                 </div>
                             </div>
-                            <button type="submit" class="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] py-3 rounded-lg font-semibold hover:scale-105 transition">
+                            <button type="submit" class="inline-flex items-center justify-center gap-2 w-full bg-[#1f7a8c] text-[#eef4ff] py-3 rounded-lg font-semibold hover:bg-[#2a8fa2] transition border border-white/20">
                                 <i data-lucide="save" class="ico ico-sm"></i>Сохранить
                             </button>
                         </form>
@@ -238,7 +239,7 @@
                                     <input type="checkbox" id="cardDefault" class="accent-[#00d4ff]">
                                     Сделать картой по умолчанию
                                 </label>
-                                <button type="submit" class="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] py-3 rounded-lg font-semibold hover:scale-105 transition">
+                                <button type="submit" class="inline-flex items-center justify-center gap-2 w-full bg-[#1f7a8c] text-[#eef4ff] py-3 rounded-lg font-semibold hover:bg-[#2a8fa2] transition border border-white/20">
                                     <i data-lucide="plus" class="ico ico-sm"></i>Привязать карту
                                 </button>
                                 <p class="text-xs text-white/45">Это демонстрационная оплата для дипломного проекта. CVC не запрашивается, списания денег не происходит.</p>
@@ -531,7 +532,7 @@
                 <div class="rounded-2xl border ${method.isDefault ? 'border-[#00d4ff]/45 bg-[#00d4ff]/10' : 'border-white/10 bg-white/5'} p-5">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div class="flex items-center gap-4">
-                            <div class="w-14 h-10 rounded-xl bg-gradient-to-br from-[#00d4ff] to-[#ff8c00] text-[#001f3f] flex items-center justify-center">
+                            <div class="w-14 h-10 rounded-xl bg-[#2f3d4f] text-[#eef4ff] flex items-center justify-center border border-white/20">
                                 <i data-lucide="credit-card" class="ico"></i>
                             </div>
                             <div>

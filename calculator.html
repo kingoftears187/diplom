@@ -55,12 +55,15 @@
         </div>
     </nav>
 
-    <section class="tn-page-hero py-12 sm:py-16 md:py-24">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-            <h1 class="heading text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 gradient-text">Калькулятор стоимости</h1>
-            <p class="text-base sm:text-lg md:text-xl text-white/80 mb-6 sm:mb-8 md:mb-10">Введите параметры груза и получите ориентировочную стоимость за секунды.</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                <div class="card-glowing card-glowing--dropdown-safe border border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 space-y-4 sm:space-y-6">
+    <section class="tn-page-hero py-12 sm:py-16 md:py-24 atlas-calculator-page">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="atlas-page-intro text-center">
+                <p class="hero-badge inline-flex"><i data-lucide="route" class="ico ico-sm"></i> Расчёт маршрута</p>
+                <h1 class="heading text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">Калькулятор стоимости</h1>
+                <p class="text-base sm:text-lg md:text-xl text-white/80 mb-6 sm:mb-8 md:mb-10">Введите параметры груза и получите ориентировочную стоимость за секунды.</p>
+            </div>
+            <div class="atlas-calc-layout">
+                <div class="card-glowing card-glowing--dropdown-safe border border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 space-y-4 sm:space-y-6 atlas-calc-form">
                     <div class="tn-select-field">
                         <label for="fromCityTrigger" class="block mb-2 text-sm text-white/70">Город отправления</label>
                         <div class="tn-fancy-select" data-fancy-root>
@@ -134,9 +137,9 @@
                             <button type="button" onclick="selectCargoType(this)" data-type="oversize" class="cargo-btn border border-white/20 px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-2xl text-white flex items-center gap-2 transition text-sm sm:text-base"> Негабарит</button>
                         </div>
                     </div>
-                    <button onclick="calculateAndAddToCart()" class="w-full bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] py-3 sm:py-4 md:py-5 rounded-2xl md:rounded-3xl font-semibold hover:scale-105 transition text-sm sm:text-base md:text-lg">Рассчитать</button>
+                    <button onclick="calculateAndAddToCart()" class="w-full bg-[#1f7a8c] text-[#eef4ff] py-3 sm:py-4 md:py-5 rounded-2xl md:rounded-3xl font-semibold hover:bg-[#2a8fa2] transition text-sm sm:text-base md:text-lg border border-white/20">Рассчитать</button>
                 </div>
-                <div class="card-glowing rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-10 border border-white/10">
+                <div class="card-glowing rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-10 border border-white/10 atlas-calc-result">
                     <div class="text-xs sm:text-sm text-white/60 mb-3">Ориентировочная стоимость</div>
                     <div id="resultPrice" class="text-3xl sm:text-4xl md:text-5xl font-bold heading text-[#00d4ff] mb-4">0 ₽</div>
                     <div id="resultTime" class="text-white/70 mb-6 sm:mb-8 text-sm sm:text-base">Срок доставки: 24 дня</div>
@@ -147,7 +150,7 @@
         </div>
     </section>
 
-    <section class="py-20 tn-band">
+    <section class="py-20 tn-band atlas-calculator-benefits">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-center">
             <div class="card-glowing rounded-3xl p-8 border border-white/10">
                 <div class="text-[#00d4ff] mb-3 flex justify-center"><i data-lucide="calculator" class="ico-xl"></i></div>

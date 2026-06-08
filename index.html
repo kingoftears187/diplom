@@ -57,50 +57,70 @@
     </nav>
 
    <!-- HERO -->
-    <section class="hero-bg">
-        <section class="tn-container relative z-10 py-16 lg:py-24">
-            <section class="hero-grid">
-                <article class="fade-in">
-                    <p class="hero-badge"><i data-lucide="sparkles" class="ico ico-sm"></i> С 2009 года на рынке</p>
-                <h1 class="heading text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tighter mb-6 gradient-text">
-                    Надёжная перевозка грузов по России
-                </h1>
-                <p class="text-lg md:text-xl text-white/75 mb-8 max-w-xl">Автомобильные, контейнерные и рефрижераторные перевозки. GPS-контроль, страхование и персональный менеджер на каждом маршруте.</p>
-                <p class="flex flex-col sm:flex-row flex-wrap gap-4">
-                    <a href="calculator.html" class="tn-btn-primary"><i data-lucide="calculator" class="ico"></i> Рассчитать стоимость</a>
-                    <a href="services.html" class="tn-btn-outline"><i data-lucide="layout-grid" class="ico"></i> Наши услуги</a>
-                </p>
+    <section class="hero-bg atlas-hero-zone">
+        <section class="tn-container relative z-10 py-14 lg:py-20">
+            <section class="atlas-hero-wrap">
+                <article class="atlas-hero-main fade-in">
+                    <p class="hero-badge"><i data-lucide="radar" class="ico ico-sm"></i> Диспетчерский центр 24/7</p>
+                    <h1 class="heading text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+                        Логистика, собранная<br>в единую систему маршрутов
+                    </h1>
+                    <p class="text-lg md:text-xl text-white/75 mb-8 max-w-2xl">
+                        ТрансНафта сочетает перевозки, контроль и сервис в одном контуре:
+                        от расчёта стоимости до подтверждения доставки.
+                    </p>
+                    <div class="flex flex-col sm:flex-row flex-wrap gap-4 mb-8">
+                        <a href="calculator.html" class="tn-btn-primary"><i data-lucide="calculator" class="ico"></i> Запустить расчёт</a>
+                        <a href="services.html" class="tn-btn-outline"><i data-lucide="layout-grid" class="ico"></i> Открыть направления</a>
+                    </div>
+                    <div class="atlas-route-tags">
+                        <span><i data-lucide="map-pin" class="ico ico-sm"></i> Москва — Екатеринбург</span>
+                        <span><i data-lucide="map-pin" class="ico ico-sm"></i> Санкт-Петербург — Казань</span>
+                        <span><i data-lucide="map-pin" class="ico ico-sm"></i> Новосибирск — Владивосток</span>
+                    </div>
                 </article>
-                <aside class="hero-stats-rail fade-in">
-                    <p class="hero-stat-item"><strong>50 000+</strong><span>доставок</span></p>
-                    <p class="hero-stat-item"><strong>120</strong><span>единиц техники</span></p>
-                    <p class="hero-stat-item"><strong>78</strong><span>регионов РФ</span></p>
-                    <p class="hero-stat-item"><strong>4.9</strong><span>рейтинг клиентов</span></p>
+
+                <aside class="atlas-hero-side fade-in">
+                    <div class="atlas-ops card-glowing">
+                        <div class="atlas-ops-head">
+                            <strong>Панель маршрутов</strong>
+                            <span>online</span>
+                        </div>
+                        <div class="atlas-ops-list">
+                            <p><b>12</b> активных перевозок в пути</p>
+                            <p><b>31</b> заявка в обработке менеджеров</p>
+                            <p><b>99.8%</b> доставок без задержек</p>
+                            <p><b>5.2 дня</b> средний срок по РФ</p>
+                        </div>
+                    </div>
+                    <div class="atlas-kpi-grid">
+                        <p class="hero-stat-item"><strong>50 000+</strong><span>доставок</span></p>
+                        <p class="hero-stat-item"><strong>120</strong><span>единиц техники</span></p>
+                        <p class="hero-stat-item"><strong>78</strong><span>регионов РФ</span></p>
+                        <p class="hero-stat-item"><strong>4.9</strong><span>рейтинг клиентов</span></p>
+                    </div>
                 </aside>
             </section>
         </section>
     </section>
 
     <!-- Преимущества -->
-    <section class="py-12 sm:py-16 md:py-20 tn-band tn-band--shift">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-            <div class="stat-card card-glowing backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center border border-white/10 hover:border-[#00d4ff]/50 transition">
-                <div class="text-[#00d4ff] mb-3 sm:mb-4 flex justify-center"><i data-lucide="chart-column" class="ico-xl"></i></div>
-                <h3 class="text-lg sm:text-2xl font-semibold mb-2 text-[#00d4ff]">50 000+ грузов</h3>
-                <p class="text-sm sm:text-base text-white/70">Успешно доставлено по всей России</p>
-                <div class="mt-3 sm:mt-4 text-[#ff8c00] font-bold text-base sm:text-lg">99.8% успеха</div>
+    <section class="py-12 sm:py-16 md:py-20 tn-band tn-band--shift atlas-strip">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+            <div class="stat-card card-glowing rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-white/10 transition">
+                <div class="atlas-row-head"><i data-lucide="chart-column" class="ico-xl text-[#00d4ff]"></i><h3 class="text-lg sm:text-2xl font-semibold text-[#00d4ff]">50 000+ грузов</h3></div>
+                <p class="text-sm sm:text-base text-white/70 mt-3">Успешно доставлено по всей России</p>
+                <div class="mt-4 text-[#ff8c00] font-bold text-base sm:text-lg">99.8% успеха</div>
             </div>
-            <div class="stat-card card-glowing backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center border border-white/10 hover:border-[#00d4ff]/50 transition">
-                <div class="text-[#ff8c00] mb-3 sm:mb-4 flex justify-center"><i data-lucide="truck" class="ico-xl"></i></div>
-                <h3 class="text-lg sm:text-2xl font-semibold mb-2 text-[#00d4ff]">120 машин</h3>
-                <p class="text-sm sm:text-base text-white/70">Современный автопарк с GPS-отслеживанием</p>
-                <div class="mt-3 sm:mt-4 text-[#ff8c00] font-bold text-base sm:text-lg">Обновлено в 2024</div>
+            <div class="stat-card card-glowing rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-white/10 transition">
+                <div class="atlas-row-head"><i data-lucide="truck" class="ico-xl text-[#ff8c00]"></i><h3 class="text-lg sm:text-2xl font-semibold text-[#00d4ff]">120 машин</h3></div>
+                <p class="text-sm sm:text-base text-white/70 mt-3">Современный автопарк с GPS-отслеживанием</p>
+                <div class="mt-4 text-[#ff8c00] font-bold text-base sm:text-lg">Обновлено в 2024</div>
             </div>
-            <div class="stat-card card-glowing backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center border border-white/10 hover:border-[#00d4ff]/50 transition">
-                <div class="text-[#00d4ff] mb-3 sm:mb-4 flex justify-center"><i data-lucide="timer" class="ico-xl"></i></div>
-                <h3 class="text-lg sm:text-2xl font-semibold mb-2 text-[#00d4ff]">Средний срок</h3>
-                <p class="text-sm sm:text-base text-white/70">5.2 дня доставки в среднем по России</p>
-                <div class="mt-3 sm:mt-4 text-[#ff8c00] font-bold text-base sm:text-lg">±0.5 дня точность</div>
+            <div class="stat-card card-glowing rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-white/10 transition">
+                <div class="atlas-row-head"><i data-lucide="timer" class="ico-xl text-[#00d4ff]"></i><h3 class="text-lg sm:text-2xl font-semibold text-[#00d4ff]">Средний срок</h3></div>
+                <p class="text-sm sm:text-base text-white/70 mt-3">5.2 дня доставки в среднем по России</p>
+                <div class="mt-4 text-[#ff8c00] font-bold text-base sm:text-lg">±0.5 дня точность</div>
             </div>
         </div>
     </section>
@@ -299,7 +319,7 @@
     <div id="chat-window"
          class="hidden fixed bottom-28 right-8 w-[380px] h-[560px] flex flex-col border border-white/10 overflow-hidden z-[10000] rounded-[22px] bg-[#151822] shadow-2xl">
         
-        <div class="bg-gradient-to-r from-violet-600 to-cyan-500 px-5 py-4 flex items-center justify-between text-white">
+        <div class="bg-[#1d2a39] px-5 py-4 flex items-center justify-between text-white border-b border-white/10">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-black/25 rounded-xl flex items-center justify-center"><i data-lucide="headphones" class="ico text-white"></i></div>
                 <div>
@@ -321,7 +341,7 @@
                     placeholder="Вопрос о доставке..."
                     class="flex-1 bg-white/5 border border-white/15 focus:border-violet-400 rounded-2xl px-5 py-3.5 text-white placeholder:text-white/45 focus:outline-none text-base">
                 <button type="button" id="send-button"
-                        class="w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center bg-gradient-to-br from-violet-600 to-cyan-500 text-white hover:scale-105 transition shadow-lg">
+                        class="w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center bg-[#2f3d4f] text-white hover:bg-[#3c4d63] transition shadow-lg border border-white/15">
                     <i data-lucide="send" class="ico"></i>
                 </button>
             </div>
@@ -368,7 +388,7 @@
                     <div class="flex ${isUser ? 'justify-end' : 'justify-start'} chat-message">
                         <div class="max-w-[85%] rounded-3xl px-5 py-3 
                                     ${isUser 
-                                        ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-medium' 
+                                        ? 'bg-[#2f3d4f] text-white font-medium border border-white/15'
                                         : 'bg-white/8 text-white border border-white/10'}">
                             ${msg.content}
                         </div>

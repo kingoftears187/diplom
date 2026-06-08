@@ -1700,3 +1700,1147 @@ select.tn-field:focus {
     margin: 0 auto;
     padding: 0 1.5rem;
 }
+
+/* 2026 redesign: anti-gradient industrial style */
+body {
+    background: #0b0e14 !important;
+}
+
+body::before {
+    background: repeating-linear-gradient(
+        -35deg,
+        rgba(255, 255, 255, 0.02) 0,
+        rgba(255, 255, 255, 0.02) 1px,
+        transparent 1px,
+        transparent 14px
+    ) !important;
+    filter: none !important;
+    animation: none !important;
+    opacity: 0.45;
+}
+
+body::after {
+    background-image: none !important;
+    mask-image: none !important;
+}
+
+.gradient-text,
+.heading.gradient-text {
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: #e9edf6 !important;
+}
+
+.bg-gradient-to-r,
+.bg-gradient-to-br,
+.bg-gradient-to-t {
+    background-image: none !important;
+}
+
+.from-\[\#00d4ff\]\/10,
+.from-violet-600,
+.to-cyan-500,
+.to-\[\#ff8c00\],
+.to-\[\#00d4ff\],
+.from-\[\#ff8c00\] {
+    background-image: none !important;
+}
+
+.tn-btn-primary,
+.cart-checkout,
+#chat-button {
+    background: #1f7a8c !important;
+    color: #eef4ff !important;
+    box-shadow: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tn-btn-primary:hover,
+.cart-checkout:hover,
+#chat-button:hover {
+    background: #2a8fa2 !important;
+    filter: none !important;
+}
+
+#cartCount {
+    background: #c96a2d !important;
+    color: #fff !important;
+}
+
+.tn-logo-mark,
+.tn-brand-link .tn-logo-mark,
+.tn-brand-link .tn-logo-mark::before,
+.tn-brand-link .tn-logo-mark::after {
+    background: #243447 !important;
+    animation: none !important;
+}
+
+.tn-nav::after,
+.nav-link::after,
+.site-footer-route-line,
+.site-footer::after,
+.tn-page-hero::after {
+    background: #314257 !important;
+    box-shadow: none !important;
+}
+
+.sidebar,
+.admin-tab-btn.active,
+.sidebar-item.active {
+    background: #1a2430 !important;
+}
+
+.hero-bg,
+.tn-page-hero::before,
+.tn-band::before,
+.tn-band--shift::before,
+.tn-band--invert::before,
+.tn-band--glow::before,
+.tn-section-alt::before,
+.site-footer {
+    background-image: none !important;
+}
+
+.card-glowing,
+.card-glowing::before,
+.card-glowing::after,
+.hero-stat-item,
+.cart-summary,
+.sidebar {
+    background-image: none !important;
+}
+
+.card-glowing {
+    background-color: #161c26 !important;
+    border: 1px solid rgba(210, 218, 230, 0.16) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.34) !important;
+}
+
+.card-glowing::before,
+.card-glowing::after {
+    display: none !important;
+}
+
+[style*="conic-gradient"] {
+    background: #2f4858 !important;
+}
+
+/* 2026 redesign v2: Harbor Blueprint identity */
+:root {
+    --hb-bg: #0a0d12;
+    --hb-panel: #131922;
+    --hb-panel-2: #1a2230;
+    --hb-line: #2e3a4c;
+    --hb-line-soft: #46546a;
+    --hb-text: #e7edf8;
+    --hb-muted: #9aa6bb;
+    --hb-accent: #74b3c7;
+    --hb-accent-2: #c49a6c;
+    --hb-ok: #7aa38b;
+}
+
+body {
+    color: var(--hb-text) !important;
+    background: var(--hb-bg) !important;
+}
+
+body::before {
+    inset: 0 !important;
+    opacity: 0.35 !important;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0,
+            transparent 34px,
+            rgba(116, 179, 199, 0.07) 34px,
+            rgba(116, 179, 199, 0.07) 35px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 34px,
+            rgba(116, 179, 199, 0.07) 34px,
+            rgba(116, 179, 199, 0.07) 35px
+        ) !important;
+}
+
+.tn-nav {
+    background: rgba(10, 13, 18, 0.92) !important;
+    border-bottom: 2px solid var(--hb-line) !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.tn-brand-link {
+    gap: 0.9rem !important;
+}
+
+.tn-logo-mark,
+.tn-brand-link .tn-logo-mark {
+    width: 3rem !important;
+    height: 3rem !important;
+    border-radius: 12px !important;
+    border: 1px solid var(--hb-line-soft) !important;
+    background: var(--hb-panel-2) !important;
+    color: var(--hb-accent) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.tn-brand-link .tn-logo-mark::before,
+.tn-brand-link .tn-logo-mark::after {
+    display: none !important;
+}
+
+/* bring back animated logo as brand feature */
+.tn-brand-link .tn-logo-mark {
+    overflow: visible !important;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.35) inset,
+        0 2px 0 rgba(255, 255, 255, 0.12) inset,
+        0 6px 16px rgba(78, 195, 224, 0.16),
+        0 14px 34px rgba(0, 0, 0, 0.36) !important;
+}
+
+.tn-brand-link .tn-logo-mark::before {
+    content: '' !important;
+    display: block !important;
+    position: absolute !important;
+    inset: -4px !important;
+    border-radius: 14px !important;
+    background:
+        conic-gradient(
+            from 0deg,
+            rgba(78, 195, 224, 0.62),
+            rgba(240, 179, 106, 0.58),
+            rgba(126, 174, 204, 0.64),
+            rgba(78, 195, 224, 0.62)
+        ) !important;
+    filter: saturate(1.02);
+    opacity: 0.75 !important;
+    z-index: -1 !important;
+    animation: tn-logo-orbit 13s cubic-bezier(0.42, 0, 0.58, 1) infinite !important;
+}
+
+.tn-brand-link .tn-logo-mark::after {
+    content: '' !important;
+    display: block !important;
+    position: absolute !important;
+    inset: 2px !important;
+    border-radius: 10px !important;
+    background:
+        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.22), transparent 52%),
+        rgba(16, 27, 41, 0.9) !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+    z-index: 0 !important;
+}
+
+.tn-brand-link .tn-logo-mark .ico,
+.tn-brand-link .tn-logo-mark svg {
+    position: relative;
+    z-index: 1;
+    color: #b4e8f8;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+}
+
+@keyframes tn-logo-orbit {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+    40% {
+        transform: rotate(140deg) scale(1.015);
+    }
+    70% {
+        transform: rotate(250deg) scale(1.005);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+.tn-logo-text,
+.heading {
+    letter-spacing: 0.01em !important;
+    text-transform: none !important;
+}
+
+.nav-link,
+#mobileMenu a,
+.site-footer a {
+    color: var(--hb-muted) !important;
+}
+
+.nav-link:hover,
+#mobileMenu a:hover,
+.site-footer a:hover {
+    color: var(--hb-text) !important;
+}
+
+.tn-btn-primary,
+.tn-btn-outline,
+.cart-checkout,
+#contactSubmitBtn,
+#chat-button {
+    border-radius: 8px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+}
+
+.tn-btn-primary,
+.cart-checkout,
+#contactSubmitBtn,
+#chat-button {
+    background: #2a5f70 !important;
+    border: 1px solid #4d7f8d !important;
+    color: #eff6ff !important;
+}
+
+.tn-btn-primary:hover,
+.cart-checkout:hover,
+#contactSubmitBtn:hover,
+#chat-button:hover {
+    background: #357488 !important;
+}
+
+.tn-btn-outline {
+    background: transparent !important;
+    border: 1px solid var(--hb-line-soft) !important;
+    color: var(--hb-text) !important;
+}
+
+.tn-btn-outline:hover {
+    background: rgba(116, 179, 199, 0.08) !important;
+    border-color: var(--hb-accent) !important;
+}
+
+.hero-bg,
+.tn-page-hero {
+    min-height: auto !important;
+}
+
+.hero-bg::before,
+.hero-bg::after,
+.tn-page-hero::after,
+.tn-band::after,
+.tn-section-alt::after {
+    display: none !important;
+}
+
+.hero-badge {
+    border-radius: 6px !important;
+    border: 1px solid var(--hb-line-soft) !important;
+    background: rgba(196, 154, 108, 0.12) !important;
+    color: #dfc29d !important;
+}
+
+.hero-stat-item,
+.stat-box,
+.cart-summary,
+.sidebar,
+#chat-window {
+    background: var(--hb-panel) !important;
+    border: 1px solid var(--hb-line) !important;
+    box-shadow: none !important;
+}
+
+.hero-stat-item strong,
+.cart-price,
+#cartTotal {
+    color: var(--hb-accent) !important;
+    -webkit-text-fill-color: currentColor !important;
+    background: none !important;
+}
+
+.card-glowing,
+.review-card,
+.stat-card,
+.cart-line,
+.cart-empty,
+.tab-btn,
+.sidebar-item,
+.tn-fancy-select__trigger,
+.tn-fancy-select__dropdown,
+.tn-fancy-select__option,
+input,
+select,
+textarea {
+    border-radius: 10px !important;
+}
+
+.card-glowing,
+.review-card,
+.cart-line,
+.tab-content > .card-glowing,
+.admin-stat-card {
+    background: var(--hb-panel) !important;
+    border: 1px solid var(--hb-line) !important;
+    box-shadow: none !important;
+    position: relative;
+}
+
+.card-glowing:hover,
+.review-card:hover,
+.cart-line:hover {
+    transform: translateY(-2px) !important;
+    border-color: var(--hb-accent) !important;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25) !important;
+}
+
+.card-glowing::before,
+.review-card::before {
+    content: '';
+    position: absolute;
+    top: 0.55rem;
+    right: 0.55rem;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: var(--hb-accent-2);
+    opacity: 0.75;
+}
+
+.card-glowing::after,
+.review-card::after {
+    display: block !important;
+    content: '';
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 0;
+    height: 1px;
+    background: rgba(116, 179, 199, 0.25);
+}
+
+.tab-btn.active,
+.sidebar-item.active,
+.admin-tab-btn.active {
+    background: rgba(116, 179, 199, 0.12) !important;
+    color: var(--hb-text) !important;
+    border-left: 3px solid var(--hb-accent) !important;
+}
+
+input,
+select,
+textarea,
+.calculator-input {
+    background: #0f141d !important;
+    border: 1px solid var(--hb-line) !important;
+    color: var(--hb-text) !important;
+    box-shadow: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.calculator-input:focus {
+    border-color: var(--hb-accent) !important;
+    box-shadow: 0 0 0 2px rgba(116, 179, 199, 0.25) !important;
+}
+
+.cargo-btn.active {
+    background: rgba(116, 179, 199, 0.16) !important;
+    border-color: var(--hb-accent) !important;
+}
+
+.tn-fancy-select__trigger {
+    background: #0f141d !important;
+    border: 1px solid var(--hb-line) !important;
+    border-left: 3px solid var(--hb-accent) !important;
+}
+
+.tn-fancy-select__dropdown {
+    background: #0f141d !important;
+    border: 1px solid var(--hb-line-soft) !important;
+}
+
+.tn-fancy-select__option.is-active {
+    background: rgba(116, 179, 199, 0.14) !important;
+    border-color: rgba(116, 179, 199, 0.35) !important;
+}
+
+.site-footer {
+    border-top: 2px solid var(--hb-line) !important;
+    background: #0e1219 !important;
+}
+
+.site-footer::before,
+.site-footer::after,
+.site-footer-route,
+.site-footer-route-line::after {
+    display: none !important;
+}
+
+.site-footer-bottom {
+    border-top: 1px solid var(--hb-line) !important;
+}
+
+#chat-window {
+    border-radius: 12px !important;
+}
+
+#chat-window > div:first-child {
+    background: #223140 !important;
+    border-bottom: 1px solid var(--hb-line) !important;
+}
+
+#chat-messages {
+    background: #111723 !important;
+}
+
+.status-active {
+    background: rgba(122, 163, 139, 0.2) !important;
+    color: #9ec2aa !important;
+}
+
+.status-inactive {
+    background: rgba(175, 92, 92, 0.2) !important;
+    color: #d0a3a3 !important;
+}
+
+.status-pending {
+    background: rgba(196, 154, 108, 0.2) !important;
+    color: #dfc29d !important;
+}
+
+/* 2026 redesign v3: Atlas Dock signature */
+:root {
+    --atlas-bg: #0b0f17;
+    --atlas-surface: #121a27;
+    --atlas-surface-soft: #192335;
+    --atlas-line: #30435d;
+    --atlas-line-soft: #496389;
+    --atlas-text: #eef3ff;
+    --atlas-muted: #9aabc7;
+    --atlas-cyan: #4ec3e0;
+    --atlas-amber: #f0b36a;
+}
+
+body {
+    background: var(--atlas-bg) !important;
+    color: var(--atlas-text) !important;
+}
+
+body::before {
+    opacity: 0.55 !important;
+    background:
+        radial-gradient(circle at 12% 8%, rgba(78, 195, 224, 0.14), transparent 24%),
+        radial-gradient(circle at 90% 92%, rgba(240, 179, 106, 0.12), transparent 26%),
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 39px,
+            rgba(78, 195, 224, 0.08) 39px,
+            rgba(78, 195, 224, 0.08) 40px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent 0,
+            transparent 39px,
+            rgba(78, 195, 224, 0.08) 39px,
+            rgba(78, 195, 224, 0.08) 40px
+        ) !important;
+}
+
+.tn-nav {
+    background: rgba(9, 13, 20, 0.9) !important;
+    border-bottom: 1px solid var(--atlas-line) !important;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35) !important;
+}
+
+.tn-nav .max-w-7xl {
+    position: relative;
+}
+
+.tn-nav .max-w-7xl::after {
+    content: '';
+    position: absolute;
+    left: 1.2rem;
+    right: 1.2rem;
+    bottom: -1px;
+    border-bottom: 1px dashed rgba(78, 195, 224, 0.38);
+    pointer-events: none;
+}
+
+.tn-logo-mark,
+.tn-brand-link .tn-logo-mark {
+    border-radius: 4px !important;
+    border: 1px solid var(--atlas-line-soft) !important;
+    background: #172333 !important;
+    color: var(--atlas-cyan) !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset !important;
+}
+
+.tn-logo-text {
+    font-weight: 800 !important;
+    letter-spacing: 0.02em !important;
+}
+
+.heading {
+    letter-spacing: 0.015em !important;
+}
+
+.hero-badge {
+    border-radius: 4px !important;
+    border-style: dashed !important;
+    border-color: rgba(240, 179, 106, 0.55) !important;
+    background: rgba(240, 179, 106, 0.12) !important;
+}
+
+.tn-btn-primary,
+.tn-btn-outline,
+.cart-checkout,
+#contactSubmitBtn {
+    border-radius: 6px !important;
+    text-transform: none !important;
+    letter-spacing: 0.02em !important;
+    font-size: 0.9rem !important;
+}
+
+.tn-btn-primary,
+.cart-checkout,
+#contactSubmitBtn {
+    background: #2a6980 !important;
+    border: 1px solid #5ca2be !important;
+}
+
+.tn-btn-primary:hover,
+.cart-checkout:hover,
+#contactSubmitBtn:hover {
+    background: #3a7f97 !important;
+}
+
+.tn-btn-outline {
+    background: rgba(25, 35, 53, 0.7) !important;
+    border: 1px solid var(--atlas-line) !important;
+    color: var(--atlas-text) !important;
+}
+
+.tn-btn-outline:hover {
+    border-color: var(--atlas-cyan) !important;
+    background: rgba(78, 195, 224, 0.1) !important;
+}
+
+.card-glowing,
+.review-card,
+.cart-line,
+.cart-summary,
+.hero-stat-item,
+.sidebar,
+#chat-window {
+    background: var(--atlas-surface) !important;
+    border: 1px solid var(--atlas-line) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28) !important;
+}
+
+.card-glowing:hover,
+.review-card:hover,
+.cart-line:hover,
+.hero-stat-item:hover {
+    transform: translateY(-3px) !important;
+    border-color: var(--atlas-line-soft) !important;
+    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.34) !important;
+}
+
+.card-glowing::before,
+.review-card::before {
+    width: 0.65rem !important;
+    height: 0.65rem !important;
+    top: 0.6rem !important;
+    right: 0.6rem !important;
+    background: var(--atlas-amber) !important;
+}
+
+.card-glowing::after,
+.review-card::after {
+    left: 0.8rem !important;
+    right: 0.8rem !important;
+    background: rgba(78, 195, 224, 0.38) !important;
+}
+
+.stat-card,
+.review-card,
+.card-hover {
+    animation-duration: 0.5s !important;
+}
+
+.nav-link,
+.site-footer a,
+#mobileMenu a {
+    color: var(--atlas-muted) !important;
+}
+
+.nav-link:hover,
+.site-footer a:hover,
+#mobileMenu a:hover {
+    color: var(--atlas-text) !important;
+}
+
+.tab-btn.active,
+.sidebar-item.active,
+.admin-tab-btn.active {
+    background: rgba(78, 195, 224, 0.16) !important;
+    border-left-color: var(--atlas-cyan) !important;
+}
+
+input,
+select,
+textarea,
+.calculator-input,
+.tn-fancy-select__trigger,
+.tn-fancy-select__dropdown {
+    background: #0f1724 !important;
+    border-color: var(--atlas-line) !important;
+    color: var(--atlas-text) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.calculator-input:focus,
+.tn-fancy-select.is-open .tn-fancy-select__trigger {
+    border-color: var(--atlas-cyan) !important;
+    box-shadow: 0 0 0 2px rgba(78, 195, 224, 0.28) !important;
+}
+
+.tn-fancy-select__option.is-active {
+    background: rgba(78, 195, 224, 0.14) !important;
+    border-color: rgba(78, 195, 224, 0.4) !important;
+}
+
+.site-footer {
+    background: #0d1420 !important;
+    border-top: 1px solid var(--atlas-line) !important;
+}
+
+.site-footer-bottom {
+    border-top-color: var(--atlas-line) !important;
+}
+
+.site-footer-slot {
+    border-color: rgba(78, 195, 224, 0.35) !important;
+    color: #b8d8e6 !important;
+}
+
+#chat-window > div:first-child {
+    background: #22354a !important;
+}
+
+#chat-messages {
+    background: #0f1724 !important;
+}
+
+.hero-stat-item strong,
+#cartTotal,
+.cart-price {
+    color: #8bd0e7 !important;
+}
+
+/* allow colorful pie chart in About section */
+.about-pie-chart[style*="conic-gradient"] {
+    background: conic-gradient(#22d3ee 0 46%, #fb923c 46% 73%, #a78bfa 73% 91%, #34d399 91% 100%) !important;
+}
+
+/* layout refresh blocks */
+.atlas-hero-zone {
+    padding-top: 1rem;
+}
+
+.atlas-hero-wrap {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 1100px) {
+    .atlas-hero-wrap {
+        grid-template-columns: 1.2fr 0.8fr;
+        align-items: stretch;
+    }
+}
+
+.atlas-hero-main {
+    padding: 2rem;
+    border: 1px solid rgba(78, 195, 224, 0.18);
+    background: rgba(18, 26, 39, 0.82);
+    border-radius: 14px;
+    backdrop-filter: blur(6px);
+}
+
+.atlas-route-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.atlas-route-tags span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.76rem;
+    border-radius: 6px;
+    color: #b8c8df;
+    border: 1px dashed rgba(78, 195, 224, 0.32);
+    background: rgba(15, 23, 36, 0.75);
+}
+
+.atlas-hero-side {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.atlas-ops {
+    padding: 1rem 1.15rem;
+}
+
+.atlas-ops-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.atlas-ops-head strong {
+    font-size: 0.95rem;
+}
+
+.atlas-ops-head span {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8fd4ab;
+}
+
+.atlas-ops-list p {
+    margin: 0.35rem 0;
+    color: #b6c2d8;
+    font-size: 0.86rem;
+}
+
+.atlas-ops-list b {
+    color: #e7eefb;
+}
+
+.atlas-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+}
+
+.atlas-strip .card-glowing {
+    min-height: 220px;
+}
+
+.atlas-row-head {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.atlas-services-hero .atlas-board {
+    background: rgba(18, 26, 39, 0.86) !important;
+}
+
+.atlas-service-grid .atlas-service-card {
+    min-height: 100%;
+}
+
+.atlas-service-card p {
+    line-height: 1.65;
+}
+
+.atlas-service-card .space-y-2 p {
+    padding-left: 0.2rem;
+}
+
+.atlas-about-hero .card-glowing {
+    background: rgba(18, 26, 39, 0.88) !important;
+}
+
+.atlas-about-values .card-glowing,
+.atlas-about-principles .card-glowing {
+    background: rgba(18, 26, 39, 0.84) !important;
+}
+
+.atlas-about-metrics article.card-glowing {
+    background: rgba(18, 26, 39, 0.88) !important;
+}
+
+/* final layout pass: Dispatch Console */
+.atlas-page-intro {
+    max-width: 54rem;
+    margin: 0 auto 2rem;
+}
+
+.atlas-calc-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    align-items: stretch;
+}
+
+@media (min-width: 980px) {
+    .atlas-calc-layout {
+        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    }
+}
+
+.atlas-calc-form {
+    position: relative;
+}
+
+.atlas-calc-form::after {
+    content: 'route input';
+    position: absolute;
+    top: 0.9rem;
+    right: 1rem;
+    font-family: ui-monospace, 'Cascadia Code', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(154, 171, 199, 0.55);
+    border: 1px solid rgba(78, 195, 224, 0.2);
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+}
+
+.atlas-calc-result {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 320px;
+}
+
+.atlas-calc-result #resultPrice {
+    font-size: clamp(2.4rem, 7vw, 4.8rem) !important;
+    letter-spacing: -0.04em;
+}
+
+.atlas-calculator-benefits .card-glowing {
+    text-align: left;
+}
+
+.atlas-cabinet-page {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(78, 195, 224, 0.08), transparent 22%),
+        radial-gradient(circle at 86% 12%, rgba(240, 179, 106, 0.07), transparent 24%);
+}
+
+.atlas-auth-landing > .hero-badge {
+    margin-bottom: 1rem;
+}
+
+.atlas-auth-grid .card-glowing {
+    text-align: left;
+    min-height: 100%;
+}
+
+.atlas-cabinet-shell {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+}
+
+.atlas-cabinet-header {
+    padding: 1.2rem;
+    border: 1px solid rgba(78, 195, 224, 0.16);
+    border-radius: 14px;
+    background: rgba(18, 26, 39, 0.78);
+}
+
+.atlas-cabinet-header #userAvatar {
+    border-radius: 10px !important;
+    color: #e8f5ff;
+}
+
+.atlas-tabs {
+    border-bottom: 0 !important;
+    padding: 0.55rem;
+    border: 1px solid rgba(78, 195, 224, 0.16);
+    border-radius: 14px;
+    background: rgba(15, 23, 36, 0.7);
+}
+
+.atlas-tabs .tab-btn {
+    border-radius: 8px !important;
+    border-left: 0 !important;
+}
+
+.atlas-tabs .tab-btn.active {
+    border-left: 0 !important;
+    outline: 1px solid rgba(78, 195, 224, 0.35);
+}
+
+.atlas-contact-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (min-width: 1024px) {
+    .atlas-contact-layout {
+        grid-template-columns: minmax(320px, 0.85fr) minmax(0, 1.15fr);
+    }
+}
+
+.atlas-contact-info {
+    position: sticky;
+    top: 6.5rem;
+}
+
+@media (max-width: 1023px) {
+    .atlas-contact-info {
+        position: static;
+    }
+}
+
+.atlas-contact-info .card-glowing,
+.atlas-contact-form {
+    background: rgba(18, 26, 39, 0.88) !important;
+}
+
+.atlas-contact-info .bg-cover {
+    border-radius: 14px !important;
+    border: 1px solid rgba(78, 195, 224, 0.18) !important;
+    box-shadow: none !important;
+    min-height: 24rem;
+    filter: saturate(0.85) contrast(1.04);
+}
+
+.atlas-contact-form input,
+.atlas-contact-form textarea {
+    border-radius: 8px !important;
+}
+
+.atlas-contact-form textarea {
+    min-height: 13rem;
+}
+
+.tn-page-hero,
+.hero-bg,
+.tn-band,
+.tn-section-alt {
+    position: relative;
+}
+
+.tn-page-hero::before,
+.hero-bg::before,
+.tn-band::before,
+.tn-section-alt::before {
+    pointer-events: none;
+}
+
+.tn-icon-btn,
+.tn-cart-btn {
+    border-radius: 8px !important;
+}
+
+.tn-cart-btn {
+    background: rgba(18, 26, 39, 0.78) !important;
+}
+
+/* calculator repair: keep the rail and dropdowns above card decoration */
+.atlas-calculator-page,
+.atlas-calculator-page .tn-page-hero,
+.atlas-calculator-page .atlas-calc-layout,
+.atlas-calculator-page .atlas-calc-form,
+.atlas-calculator-page .tn-select-field,
+.atlas-calculator-page .tn-fancy-select {
+    overflow: visible !important;
+}
+
+.atlas-calculator-page .atlas-calc-form {
+    isolation: auto !important;
+    padding-top: 2.4rem !important;
+}
+
+.atlas-calculator-page .atlas-calc-form::before {
+    content: '' !important;
+    display: block !important;
+    position: absolute !important;
+    z-index: 1 !important;
+    top: 0.65rem !important;
+    left: 0.85rem !important;
+    right: 0.85rem !important;
+    height: 0.5rem !important;
+    border-radius: 999px !important;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.06) 0,
+            rgba(255, 255, 255, 0.06) 1px,
+            transparent 1px,
+            transparent 10px
+        ),
+        rgba(68, 102, 132, 0.7) !important;
+    border: 1px solid rgba(96, 149, 186, 0.45) !important;
+    pointer-events: none !important;
+}
+
+.atlas-calculator-page .atlas-calc-form::after {
+    z-index: 2 !important;
+    top: 1.45rem !important;
+    right: 0.95rem !important;
+    font-size: 0.56rem !important;
+    letter-spacing: 0.14em !important;
+    padding: 0.12rem 0.34rem !important;
+    border-radius: 3px !important;
+    color: rgba(170, 190, 216, 0.72) !important;
+    border-color: rgba(96, 149, 186, 0.36) !important;
+    background: rgba(16, 26, 39, 0.55) !important;
+    pointer-events: none !important;
+}
+
+.atlas-calculator-page .atlas-calc-form > * {
+    position: relative;
+    z-index: 3;
+}
+
+.atlas-calculator-page .tn-select-field.is-dropdown-open {
+    z-index: 100000 !important;
+}
+
+.atlas-calculator-page .tn-fancy-select__dropdown,
+.atlas-calculator-page .tn-fancy-select__dropdown.is-mounted {
+    z-index: 1000000 !important;
+    display: flex !important;
+    background: #0f1724 !important;
+    border: 1px solid rgba(78, 195, 224, 0.55) !important;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.75) !important;
+    pointer-events: auto !important;
+}
+
+.atlas-calculator-page .tn-fancy-select__dropdown[hidden] {
+    display: none !important;
+}
+
+.atlas-calculator-page .tn-fancy-select__option {
+    color: #edf6ff !important;
+    background: transparent !important;
+}
+
+.atlas-calculator-page .tn-fancy-select__option:hover,
+.atlas-calculator-page .tn-fancy-select__option.is-active {
+    background: rgba(78, 195, 224, 0.16) !important;
+    border-color: rgba(78, 195, 224, 0.42) !important;
+}
+
+/* critical fix: disable card jump in calculator (breaks fixed dropdown positioning) */
+.atlas-calculator-page .card-glowing,
+.atlas-calculator-page .card-glowing:hover,
+.atlas-calculator-page .atlas-calc-form,
+.atlas-calculator-page .atlas-calc-form:hover,
+.atlas-calculator-page .atlas-calc-result,
+.atlas-calculator-page .atlas-calc-result:hover {
+    transform: none !important;
+}
+
+.atlas-calculator-page .card-glowing {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.atlas-calculator-page .card-glowing:hover {
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.32) !important;
+}

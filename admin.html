@@ -13,7 +13,7 @@
     <script src="auth.js"></script>
     <script src="mobile-menu.js"></script>
     <style>.pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        .stat-box { background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(255,140,0,0.05)); }
+        .stat-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); }
         .user-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
         .status-active { background: rgba(34,197,94,0.2); color: #22c55e; }
         .status-inactive { background: rgba(239,68,68,0.2); color: #ef4444; }
@@ -26,7 +26,7 @@
     <div id="adminLoginGate" class="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-[#030712]/95 backdrop-blur-md">
         <div class="w-full max-w-md card-glowing rounded-3xl border border-white/15 p-8 shadow-2xl">
             <div class="flex items-center gap-3 mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#22d3ee]/30 to-[#a78bfa]/25 flex items-center justify-center border border-white/10">
+                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/10">
                     <i data-lucide="shield-check" class="ico ico-xl text-[#67e8f9]"></i>
                 </div>
                 <div>
@@ -45,7 +45,7 @@
                     <input id="adminPass" name="password" type="password" required class="w-full rounded-xl border border-white/15 bg-black/35 px-4 py-3 text-white outline-none focus:border-[#22d3ee]" />
                 </div>
                 <p id="adminLoginErr" class="hidden text-sm text-red-400 bg-red-500/10 border border-red-500/25 rounded-xl px-3 py-2"></p>
-                <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001423] py-3 font-semibold hover:brightness-105 transition">
+                <button type="submit" class="w-full rounded-xl bg-[#1f7a8c] text-[#eef4ff] py-3 font-semibold hover:bg-[#2a8fa2] transition border border-white/20">
                     Войти в панель
                 </button>
             </form>
@@ -241,7 +241,7 @@
                         <h2 class="heading text-2xl sm:text-3xl md:text-4xl font-bold mb-2 gradient-text">Пользователи</h2>
                         <p class="text-white/70 text-sm sm:text-base">Управление аккаунтами</p>
                     </div>
-                    <button type="button" onclick="addNewUser()" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] px-4 sm:px-6 py-3 rounded-2xl font-semibold hover:scale-105 transition whitespace-nowrap text-sm sm:text-base">
+                    <button type="button" onclick="addNewUser()" class="inline-flex items-center gap-2 bg-[#1f7a8c] text-[#eef4ff] px-4 sm:px-6 py-3 rounded-2xl font-semibold hover:bg-[#2a8fa2] transition whitespace-nowrap text-sm sm:text-base border border-white/20">
                         <i data-lucide="plus" class="ico ico-sm"></i>Добавить
                     </button>
                 </div>
@@ -368,7 +368,7 @@
                 </div>
 
                 <div class="mt-8 text-center">
-                    <button type="button" onclick="saveSettings()" class="inline-flex items-center gap-2 bg-gradient-to-r from-[#00d4ff] to-[#ff8c00] text-[#001f3f] px-8 py-3 rounded-2xl font-semibold hover:scale-105 transition">
+                    <button type="button" onclick="saveSettings()" class="inline-flex items-center gap-2 bg-[#1f7a8c] text-[#eef4ff] px-8 py-3 rounded-2xl font-semibold hover:bg-[#2a8fa2] transition border border-white/20">
                         <i data-lucide="save" class="ico ico-sm"></i>Сохранить изменения
                     </button>
                 </div>
@@ -536,7 +536,7 @@
                     ? users.map(user => `
                 <div class="card-glowing rounded-2xl p-6 border border-white/10">
                     <div class="flex items-start justify-between mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-[#00d4ff] to-[#ff8c00] rounded-full flex items-center justify-center text-xl">
+                        <div class="w-12 h-12 bg-[#2f3d4f] rounded-full flex items-center justify-center text-xl border border-white/20">
                             ${esc((user.full_name || '?').charAt(0))}
                         </div>
                         <span class="user-badge ${user.status === 'active' ? 'status-active' : 'status-inactive'}">
